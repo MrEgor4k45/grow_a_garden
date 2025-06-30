@@ -61,7 +61,7 @@
 
   <div class="container">
     <div class="card">
-      <img src="https://i.imgur.com/O3pZ7vZ.png" alt="Moon Melon">
+      <img src="https://insider-gaming.com/wp-content/uploads/2025/05/grow-a-garden-update.png">
       <h3>Петомцы</h3>
       <button>Купить</button>
       <button>Продать</button>
