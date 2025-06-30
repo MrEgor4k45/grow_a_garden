@@ -1,109 +1,88 @@
-
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Магазин Grow a Garden</title>
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
 
+    const firebaseConfig = {
+      apiKey: "СЮДА_ВСТАВЬ_СВОЙ_API_KEY",
+      authDomain: "your-app-id.firebaseapp.com",
+      databaseURL: "https://your-app-id.firebaseio.com",
+      projectId: "your-app-id",
+      storageBucket: "your-app-id.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abc123"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.addEntry = (event, type) => {
+      event.preventDefault();
+      const form = event.target;
+      const inputs = form.querySelectorAll('input');
+      const data = {};
+      inputs.forEach(input => {
+        data[input.placeholder] = input.value.trim();
+        input.value = "";
+      });
+
+      // Firebase запись
+      push(ref(db, type), data);
+
+      // Показ на сайте
+      const preview = Object.entries(data)
+        .map(([k, v]) => `<strong>${k}</strong>: ${v}`)
+        .join("<br>");
+      const div = document.createElement("div");
+      div.className = "entry";
+      div.innerHTML = preview;
+      document.getElementById(`${type}-entries`).prepend(div);
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      padding: 0;
-      background-image: url('https://insider-gaming.com/wp-content/uploads/2025/05/grow-a-garden-update.png');
+      margin: 0; padding: 0;
+      background: url('https://insider-gaming.com/wp-content/uploads/2025/05/grow-a-garden-update.png') no-repeat center center fixed;
       background-size: cover;
       font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
+      color: white; text-align: center;
     }
-
-    header {
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 20px;
-      font-size: 24px;
-    }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 30px;
-    }
-
+    header { background: rgba(0,0,0,0.7); padding: 20px; font-size: 24px; }
+    .container { display: flex; justify-content: center; flex-wrap: wrap; padding: 30px; }
     .card {
-      background: rgba(0, 0, 0, 0.6);
-      margin: 20px;
-      padding: 20px;
-      width: 250px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px #222;
+      background: rgba(0,0,0,0.6); margin: 20px; padding: 20px;
+      width: 250px; border-radius: 15px; box-shadow: 0 0 10px #222;
     }
-
-    .card img {
-      width: 100%;
-      border-radius: 10px;
-    }
-
+    .card img { width: 100%; border-radius: 10px; }
     .card button {
-      margin-top: 10px;
-      padding: 10px;
-      width: 100%;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      margin-top: 10px; padding: 10px; width: 100%;
+      background-color: #4CAF50; color: white;
+      border: none; border-radius: 8px; cursor: pointer;
     }
-
-    .card button:hover {
-      background-color: #3e8e41;
-    }
-
+    .card button:hover { background-color: #3e8e41; }
     section {
-      background-color: rgba(0, 0, 0, 0.85);
-      margin: 40px auto;
-      padding: 30px;
-      width: 90%;
-      max-width: 600px;
-      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.85); margin: 40px auto; padding: 30px;
+      width: 90%; max-width: 600px; border-radius: 15px;
     }
-
-    input, textarea {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
+    input {
+      width: 90%; padding: 10px; margin: 10px 0;
+      border-radius: 8px; border: none;
     }
-
     .form-btn {
-      background-color: #2196F3;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
+      background: #2196F3; color: white; padding: 10px 20px;
+      border-radius: 8px; border: none; cursor: pointer;
     }
-
-    .form-btn:hover {
-      background-color: #0b7dda;
-    }
-
-    .entries {
-      text-align: left;
-      margin-top: 20px;
-    }
-
+    .form-btn:hover { background-color: #0b7dda; }
+    .entries { text-align: left; margin-top: 20px; }
     .entry {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-    }
-
-    a {
-      text-decoration: none;
+      background: rgba(255,255,255,0.1); padding: 10px;
+      margin: 10px 0; border-radius: 10px;
     }
   </style>
 </head>
@@ -120,7 +99,6 @@
     </div>
   </div>
 
-  <!-- Купить -->
   <section id="buy">
     <h2>📥 Купить</h2>
     <form onsubmit="addEntry(event, 'buy')">
@@ -132,7 +110,6 @@
     <div class="entries" id="buy-entries"></div>
   </section>
 
-  <!-- Продать -->
   <section id="sell">
     <h2>📤 Продать</h2>
     <form onsubmit="addEntry(event, 'sell')">
@@ -145,7 +122,6 @@
     <div class="entries" id="sell-entries"></div>
   </section>
 
-  <!-- Обмен -->
   <section id="trade">
     <h2>🔁 Обмен</h2>
     <form onsubmit="addEntry(event, 'trade')">
@@ -157,9 +133,5 @@
     </form>
     <div class="entries" id="trade-entries"></div>
   </section>
-
-      inputs.forEach(input => input.value = ""); // очистить поля
-    }
-  </script>
 </body>
 </html>
