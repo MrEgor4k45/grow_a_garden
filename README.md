@@ -48,14 +48,26 @@
       top: 10px;
       right: 10px;
     }
+    select {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid white;
+      border-radius: 6px;
+      padding: 5px;
+    }
+    select option {
+      background: black;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <div class="lang-switch">
-    <select onchange="switchLang(this.value)">
-      <option value="ru">Русский</option>
-      <option value="uk">Українська</option>
-      <option value="en">English</option>
+    <label for="lang-select">🌐</label>
+    <select id="lang-select" onchange="switchLang(this.value)">
+      <option value="ru">🇷🇺 Русский</option>
+      <option value="uk">🇺🇦 Українська</option>
+      <option value="en">🇬🇧 English</option>
     </select>
   </div>
 
@@ -119,9 +131,9 @@
 
     function switchLang(lang) {
       const titles = {
-        ru: ["\uD83D\uDCE5 Купить", "\uD83D\uDCE4 Продать", "\uD83D\uDD01 Обмен"],
-        uk: ["\uD83D\uDCE5 Купити", "\uD83D\uDCE4 Продати", "\uD83D\uDD01 Обмiн"],
-        en: ["\uD83D\uDCE5 Buy", "\uD83D\uDCE4 Sell", "\uD83D\uDD01 Trade"]
+        ru: ["📥 Купить", "📤 Продать", "🔁 Обмен"],
+        uk: ["📥 Купити", "📤 Продати", "🔁 Обмін"],
+        en: ["📥 Buy", "📤 Sell", "🔁 Trade"]
       };
       document.getElementById("title").innerText = titles[lang][0];
       document.getElementById("title-sell").innerText = titles[lang][1];
