@@ -1,9 +1,8 @@
-<!-- buy.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Requests | Grow a Garden</title>
+  <title>Grow a Garden | Requests & Auth</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/Roblox_Logo_2022.svg" />
   <style>
     body {
@@ -79,14 +78,65 @@
       background: black;
       color: white;
     }
+    /* Auth box styles */
+    #auth-box {
+      background: rgba(0,0,0,0.7);
+      padding: 20px;
+      max-width: 400px;
+      margin: 20px auto;
+      border-radius: 10px;
+      color: white;
+      text-align: center;
+    }
+    #auth-box input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    #auth-box button {
+      width: 94%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #4caf50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    #auth-box button:hover {
+      background: #3e8e41;
+      transform: scale(1.05);
+    }
+    #auth-box button:active {
+      transform: scale(1.1);
+    }
+    #auth-toggle {
+      margin-top: 15px;
+    }
+    #auth-toggle a {
+      color: #4caf50;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #auth-message {
+      margin-top: 10px;
+      min-height: 24px;
+      font-weight: bold;
+    }
+    /* Hide main content if not logged in */
+    #main-content.hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <span id="welcome-title">🌱 Welcome to the Grow a Garden website! 🌻</span>
-    <small id="welcome-subtitle">Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.</small>
-  </header>
 
+  <!-- Языковой переключатель -->
   <div class="lang-switch">
     <label for="lang-select">🌐</label>
     <select id="lang-select" onchange="switchLang(this.value)">
@@ -96,93 +146,190 @@
     </select>
   </div>
 
-  <section>
-    <h2 id="title-buy">📥 Buy</h2>
-    <form onsubmit="sendForm(event, 'buy')">
-      <input
-        type="text"
-        data-placeholder="item"
-        placeholder="What do you want to buy?"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="nick"
-        placeholder="Your Roblox nickname"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="contact"
-        placeholder="Contact (Discord etc.)"
-      />
-      <button type="submit" id="submit-buy">Submit</button>
-    </form>
-    <div class="entry" id="entries-buy"></div>
-  </section>
+  <!-- Блок авторизации -->
+  <div id="auth-box">
+    <h3 id="auth-title">Register</h3>
+    <input id="email" type="email" placeholder="Email" required />
+    <input id="password" type="password" placeholder="Password" required />
+    <button onclick="authAction()">Register</button>
+    <div id="auth-toggle">
+      <span id="toggle-text">Already have an account?</span>
+      <a onclick="toggleAuth()">Sign In</a>
+    </div>
+    <div id="auth-message"></div>
+  </div>
 
-  <section>
-    <h2 id="title-sell">📤 Sell</h2>
-    <form onsubmit="sendForm(event, 'sell')">
-      <input
-        type="text"
-        data-placeholder="item"
-        placeholder="What do you want to sell?"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="price"
-        placeholder="Price (optional)"
-      />
-      <input
-        type="text"
-        data-placeholder="nick"
-        placeholder="Your Roblox nickname"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="contact"
-        placeholder="Contact (Discord etc.)"
-      />
-      <button type="submit" id="submit-sell">Submit</button>
-    </form>
-    <div class="entry" id="entries-sell"></div>
-  </section>
+  <!-- Основной контент (показывается только после входа) -->
+  <div id="main-content" class="hidden">
 
-  <section>
-    <h2 id="title-trade">🔁 Trade</h2>
-    <form onsubmit="sendForm(event, 'trade')">
-      <input
-        type="text"
-        data-placeholder="give"
-        placeholder="What are you giving?"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="want"
-        placeholder="What do you want in return?"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="nick"
-        placeholder="Your Roblox nickname"
-        required
-      />
-      <input
-        type="text"
-        data-placeholder="contact"
-        placeholder="Contact (Discord etc.)"
-      />
-      <button type="submit" id="submit-trade">Submit</button>
-    </form>
-    <div class="entry" id="entries-trade"></div>
-  </section>
+    <header>
+      <span id="welcome-title">🌱 Welcome to the Grow a Garden website! 🌻</span>
+      <small id="welcome-subtitle">Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.</small>
+    </header>
+
+    <section>
+      <h2 id="title-buy">📥 Buy</h2>
+      <form onsubmit="sendForm(event, 'buy')">
+        <input
+          type="text"
+          data-placeholder="item"
+          placeholder="What do you want to buy?"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="nick"
+          placeholder="Your Roblox nickname"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="contact"
+          placeholder="Contact (Discord etc.)"
+        />
+        <button type="submit" id="submit-buy">Submit</button>
+      </form>
+      <div class="entry" id="entries-buy"></div>
+    </section>
+
+    <section>
+      <h2 id="title-sell">📤 Sell</h2>
+      <form onsubmit="sendForm(event, 'sell')">
+        <input
+          type="text"
+          data-placeholder="item"
+          placeholder="What do you want to sell?"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="price"
+          placeholder="Price (optional)"
+        />
+        <input
+          type="text"
+          data-placeholder="nick"
+          placeholder="Your Roblox nickname"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="contact"
+          placeholder="Contact (Discord etc.)"
+        />
+        <button type="submit" id="submit-sell">Submit</button>
+      </form>
+      <div class="entry" id="entries-sell"></div>
+    </section>
+
+    <section>
+      <h2 id="title-trade">🔁 Trade</h2>
+      <form onsubmit="sendForm(event, 'trade')">
+        <input
+          type="text"
+          data-placeholder="give"
+          placeholder="What are you giving?"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="want"
+          placeholder="What do you want in return?"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="nick"
+          placeholder="Your Roblox nickname"
+          required
+        />
+        <input
+          type="text"
+          data-placeholder="contact"
+          placeholder="Contact (Discord etc.)"
+        />
+        <button type="submit" id="submit-trade">Submit</button>
+      </form>
+      <div class="entry" id="entries-trade"></div>
+    </section>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
+    // Замените на свои параметры Firebase!
+    const firebaseConfig = {
+      apiKey: "ВАШ_API_КЛЮЧ",
+      authDomain: "ВАШ_ДОМЕН.firebaseapp.com",
+      projectId: "ВАШ_ID_ПРОЕКТА",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let isRegister = true;
+
+    function authAction() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const messageEl = document.getElementById('auth-message');
+
+      messageEl.style.color = '#f44336';
+      messageEl.textContent = '';
+
+      if (!email || !password) {
+        messageEl.textContent = 'Please enter email and password.';
+        return;
+      }
+
+      if (isRegister) {
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            messageEl.style.color = 'lime';
+            messageEl.textContent = 'Registration successful! You can now sign in.';
+          })
+          .catch(e => {
+            messageEl.textContent = e.message;
+          });
+      } else {
+        auth.signInWithEmailAndPassword(email, password)
+          .then(() => {
+            messageEl.style.color = 'lime';
+            messageEl.textContent = 'Signed in successfully!';
+            showMainContent();
+          })
+          .catch(e => {
+            messageEl.textContent = e.message;
+          });
+      }
+    }
+
+    function toggleAuth() {
+      isRegister = !isRegister;
+      document.getElementById('auth-title').textContent = isRegister ? 'Register' : 'Sign In';
+      document.querySelector('#auth-box button').textContent = isRegister ? 'Register' : 'Sign In';
+      document.getElementById('toggle-text').textContent = isRegister ? 'Already have an account?' : "Don't have an account?";
+      document.getElementById('auth-message').textContent = '';
+    }
+
+    function showMainContent() {
+      document.getElementById('auth-box').style.display = 'none';
+      document.getElementById('main-content').classList.remove('hidden');
+    }
+
+    // Автоматически проверяем, если пользователь уже вошёл
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        showMainContent();
+      } else {
+        document.getElementById('auth-box').style.display = 'block';
+        document.getElementById('main-content').classList.add('hidden');
+      }
+    });
+
+    // Заявки в Discord webhook
     const webhook =
       "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
@@ -206,6 +353,7 @@
       inputs.forEach((input) => (input.value = ""));
     }
 
+    // Переводы и переключение языка
     function switchLang(lang) {
       const translations = {
         ru: {
@@ -276,7 +424,7 @@
       });
     }
 
-    // Initialize default language to English
+    // Устанавливаем язык по умолчанию
     switchLang("en");
   </script>
 </body>
