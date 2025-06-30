@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Grow a Garden | Requests & Auth</title>
+  <title>Grow a Garden | Requests</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/Roblox_Logo_2022.svg" />
   <style>
     body {
@@ -78,59 +78,6 @@
       background: black;
       color: white;
     }
-    /* Auth box styles */
-    #auth-box {
-      background: rgba(0,0,0,0.7);
-      padding: 20px;
-      max-width: 400px;
-      margin: 20px auto;
-      border-radius: 10px;
-      color: white;
-      text-align: center;
-    }
-    #auth-message {
-      margin-top: 10px;
-      min-height: 24px;
-      font-weight: bold;
-    }
-    #google-signin {
-      background-color: #4285F4;
-      margin-top: 10px;
-      font-weight: normal;
-      transition: transform 0.2s ease;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      cursor: pointer;
-      padding: 10px;
-      font-size: 16px;
-      font-weight: bold;
-    }
-    #google-signin:hover {
-      background-color: #357ae8;
-      transform: scale(1.05);
-    }
-    #google-signin:active {
-      transform: scale(1.1);
-    }
-    #signout-btn {
-      margin-top: 15px;
-      background:#f44336;
-      width: 120px;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    #signout-btn:hover {
-      background: #d32f2f;
-      transform: scale(1.05);
-    }
-    #signout-btn:active {
-      transform: scale(1.1);
-    }
   </style>
 </head>
 <body>
@@ -145,159 +92,99 @@
     </select>
   </div>
 
-  <!-- Auth box -->
-  <div id="auth-box">
-    <button onclick="googleSignIn()" id="google-signin">Sign in with Google</button>
-    <div id="auth-message"></div>
-  </div>
+  <!-- Main content -->
+  <header>
+    <span id="welcome-title">🌱 Welcome to the Grow a Garden website! 🌻</span>
+    <small id="welcome-subtitle">Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.</small>
+  </header>
 
-  <!-- Main content (visible only after login) -->
-  <div id="main-content" class="hidden">
-    <header>
-      <span id="welcome-title">🌱 Welcome to the Grow a Garden website! 🌻</span>
-      <small id="welcome-subtitle">Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.</small>
-      <br />
-      <button id="signout-btn" onclick="signOut()">Sign Out</button>
-    </header>
+  <section>
+    <h2 id="title-buy">📥 Buy</h2>
+    <form onsubmit="sendForm(event, 'buy')">
+      <input
+        type="text"
+        data-placeholder="item"
+        placeholder="What do you want to buy?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="nick"
+        placeholder="Your Roblox nickname"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="contact"
+        placeholder="Contact (Discord etc.)"
+      />
+      <button type="submit" id="submit-buy">Submit</button>
+    </form>
+    <div class="entry" id="entries-buy"></div>
+  </section>
 
-    <section>
-      <h2 id="title-buy">📥 Buy</h2>
-      <form onsubmit="sendForm(event, 'buy')">
-        <input
-          type="text"
-          data-placeholder="item"
-          placeholder="What do you want to buy?"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="nick"
-          placeholder="Your Roblox nickname"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="contact"
-          placeholder="Contact (Discord etc.)"
-        />
-        <button type="submit" id="submit-buy">Submit</button>
-      </form>
-      <div class="entry" id="entries-buy"></div>
-    </section>
+  <section>
+    <h2 id="title-sell">📤 Sell</h2>
+    <form onsubmit="sendForm(event, 'sell')">
+      <input
+        type="text"
+        data-placeholder="item"
+        placeholder="What do you want to sell?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="price"
+        placeholder="Price (optional)"
+      />
+      <input
+        type="text"
+        data-placeholder="nick"
+        placeholder="Your Roblox nickname"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="contact"
+        placeholder="Contact (Discord etc.)"
+      />
+      <button type="submit" id="submit-sell">Submit</button>
+    </form>
+    <div class="entry" id="entries-sell"></div>
+  </section>
 
-    <section>
-      <h2 id="title-sell">📤 Sell</h2>
-      <form onsubmit="sendForm(event, 'sell')">
-        <input
-          type="text"
-          data-placeholder="item"
-          placeholder="What do you want to sell?"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="price"
-          placeholder="Price (optional)"
-        />
-        <input
-          type="text"
-          data-placeholder="nick"
-          placeholder="Your Roblox nickname"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="contact"
-          placeholder="Contact (Discord etc.)"
-        />
-        <button type="submit" id="submit-sell">Submit</button>
-      </form>
-      <div class="entry" id="entries-sell"></div>
-    </section>
-
-    <section>
-      <h2 id="title-trade">🔁 Trade</h2>
-      <form onsubmit="sendForm(event, 'trade')">
-        <input
-          type="text"
-          data-placeholder="give"
-          placeholder="What are you giving?"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="want"
-          placeholder="What do you want in return?"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="nick"
-          placeholder="Your Roblox nickname"
-          required
-        />
-        <input
-          type="text"
-          data-placeholder="contact"
-          placeholder="Contact (Discord etc.)"
-        />
-        <button type="submit" id="submit-trade">Submit</button>
-      </form>
-      <div class="entry" id="entries-trade"></div>
-    </section>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <section>
+    <h2 id="title-trade">🔁 Trade</h2>
+    <form onsubmit="sendForm(event, 'trade')">
+      <input
+        type="text"
+        data-placeholder="give"
+        placeholder="What are you giving?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="want"
+        placeholder="What do you want in return?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="nick"
+        placeholder="Your Roblox nickname"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="contact"
+        placeholder="Contact (Discord etc.)"
+      />
+      <button type="submit" id="submit-trade">Submit</button>
+    </form>
+    <div class="entry" id="entries-trade"></div>
+  </section>
 
   <script>
-    // Your Firebase config here
-    const firebaseConfig = {
-      apiKey: "AIzaSyBCc5QznggRnp6LFFJuLMIcjyrle7_R_eE",
-      authDomain: "grow-shop-c21eb.firebaseapp.com",
-      projectId: "grow-shop-c21eb",
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    function googleSignIn() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(() => {
-          showMainContent();
-          document.getElementById('auth-message').textContent = '';
-        })
-        .catch(e => {
-          const messageEl = document.getElementById('auth-message');
-          messageEl.style.color = '#f44336';
-          messageEl.textContent = e.message;
-        });
-    }
-
-    function signOut() {
-      auth.signOut().then(() => {
-        document.getElementById('auth-box').style.display = 'block';
-        document.getElementById('main-content').classList.add('hidden');
-        document.getElementById('auth-message').textContent = '';
-      });
-    }
-
-    function showMainContent() {
-      document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('main-content').classList.remove('hidden');
-    }
-
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        showMainContent();
-      } else {
-        document.getElementById('auth-box').style.display = 'block';
-        document.getElementById('main-content').classList.add('hidden');
-      }
-    });
-
     const webhook =
       "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
@@ -336,8 +223,6 @@
         price: "Цена (по желанию)",
         give: "Что вы даёте?",
         want: "Что хотите взамен?",
-        signInWithGoogle: "Войти через Google",
-        signOut: "Выйти",
       },
       uk: {
         welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
@@ -353,8 +238,6 @@
         price: "Ціна (за бажанням)",
         give: "Що ви віддаєте?",
         want: "Що хочете натомість?",
-        signInWithGoogle: "Увійти через Google",
-        signOut: "Вийти",
       },
       en: {
         welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
@@ -370,8 +253,6 @@
         price: "Price (optional)",
         give: "What are you giving?",
         want: "What do you want in return?",
-        signInWithGoogle: "Sign in with Google",
-        signOut: "Sign Out",
       },
     };
 
@@ -398,12 +279,9 @@
           input.placeholder = t[key];
         }
       });
-
-      document.getElementById("google-signin").innerText = t.signInWithGoogle;
-      document.getElementById("signout-btn").innerText = t.signOut;
     }
 
-    // Initialize language on load
+    // Инициализируем язык при загрузке
     switchLang(currentLang);
   </script>
 </body>
