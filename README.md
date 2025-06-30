@@ -67,7 +67,7 @@
   </style>
 </head>
 <body>
-  <header>🌱 Добро пожаловать на сайт Grow a Garden! 🌻<br><small>Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.</small></header>
+  <header id="header-title">🌱 Добро пожаловать на сайт Grow a Garden! 🌻<br><small id="header-desc">Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.</small></header>
 
   <div class="lang-switch">
     <label for="lang-select">🌐</label>
@@ -139,6 +139,8 @@
     function switchLang(lang) {
       const translations = {
         ru: {
+          welcome: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
+          desc: "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
           buy: "📥 Купить",
           sell: "📤 Продать",
           trade: "🔁 Обмен",
@@ -151,6 +153,8 @@
           want: "Что хотите взамен?"
         },
         uk: {
+          welcome: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
+          desc: "Тут ви можете подати заявки на купівлю, продаж або обмін предметів з гри Grow a Garden.",
           buy: "📥 Купити",
           sell: "📤 Продати",
           trade: "🔁 Обмін",
@@ -163,6 +167,8 @@
           want: "Що хочете натомість?"
         },
         en: {
+          welcome: "🌱 Welcome to Grow a Garden site! 🌻",
+          desc: "Here you can submit requests to buy, sell or trade items from Grow a Garden.",
           buy: "📥 Buy",
           sell: "📤 Sell",
           trade: "🔁 Trade",
@@ -176,6 +182,7 @@
         }
       };
 
+      document.getElementById("header-title").innerHTML = translations[lang].welcome + "<br><small id=\"header-desc\">" + translations[lang].desc + "</small>";
       document.getElementById("title").innerText = translations[lang].buy;
       document.getElementById("title-sell").innerText = translations[lang].sell;
       document.getElementById("title-trade").innerText = translations[lang].trade;
