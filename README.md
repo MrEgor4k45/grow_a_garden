@@ -45,9 +45,14 @@
       color: white;
       cursor: pointer;
       font-weight: bold;
+      transition: transform 0.2s ease;
     }
     button:hover {
       background-color: #3e8e41;
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(1.1);
     }
     .entry {
       background-color: rgba(255, 255, 255, 0.1);
@@ -271,7 +276,7 @@
       });
     }
 
-    // Инициализация языка по умолчанию - English
+    // Initialize default language to English
     switchLang("en");
   </script>
 </body>
