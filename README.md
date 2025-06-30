@@ -1,5 +1,6 @@
 <!-- buy.html -->
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Заявки | Grow a Garden</title>
@@ -14,7 +15,9 @@
       text-align: center;
     }
     header {
-      display: none;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      font-size: 24px;
     }
     section {
       background-color: rgba(0, 0, 0, 0.8);
