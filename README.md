@@ -1,7 +1,6 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grow a Garden | Заявки</title>
   <style>
     body {
@@ -11,45 +10,28 @@
       background-size: cover;
       color: white;
       text-align: center;
-      min-height: 100vh;
-      padding: 10px 10px 200px; /* Отступ снизу, чтобы формы не были зафиксированы под заявками */
-      box-sizing: border-box;
     }
     .overlay {
       background: rgba(0, 0, 0, 0.7);
       padding: 20px;
-      margin: 20px auto 10px;
+      margin: 30px auto 10px;
       border-radius: 12px;
       max-width: 700px;
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 1;
     }
     section {
       background-color: rgba(0, 0, 0, 0.75);
       padding: 20px;
-      margin: 15px auto;
+      margin: 20px auto;
       max-width: 600px;
-      width: 100%;
       border-radius: 15px;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 1;
     }
-    input, button {
-      width: 100%;
-      padding: 14px;
+    input, button, select {
+      width: 90%;
+      padding: 10px;
       margin: 10px 0;
       border-radius: 8px;
       border: none;
-      font-size: 18px;
-      box-sizing: border-box;
-      background: rgba(255,255,255,0.1);
-      color: white;
-    }
-    input::placeholder {
-      color: #ddd;
+      font-size: 16px;
     }
     button {
       background-color: #4caf50;
@@ -65,137 +47,39 @@
     button:active {
       transform: scale(1.1);
     }
-
-    /* Блоки заявок фиксируем внизу, растягиваем на всю ширину */
-    .entries-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0,0,0,0.85);
-      border-top: 3px solid #4caf50;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      box-sizing: border-box;
-      z-index: 10;
-      height: 180px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    /* Каждый блок заявок (buy, sell, trade) */
-    .entries-section {
-      flex: 1 0 33%;
-      max-width: 33%;
-      margin: 0 5px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      color: #a5d6a7;
-      font-size: 14px;
-      box-sizing: border-box;
-      overflow-y: auto;
-      padding: 6px;
-      /* Чтобы не занимал весь контент и был прокрутка */
-      max-height: 100%;
-    }
-    .entries-section h3 {
-      margin: 5px 0 10px;
-      font-weight: bold;
-      color: #81c784;
-      font-size: 16px;
-      text-align: center;
-      border-bottom: 1px solid #4caf50;
-      padding-bottom: 4px;
-    }
-    /* Карточка заявки квадратная */
-    .entry-card {
-      background-color: rgba(76, 175, 80, 0.2);
-      border: 1px solid #4caf50;
-      border-radius: 12px;
-      margin-bottom: 10px;
+    .entry {
+      background-color: rgba(255, 255, 255, 0.1);
       padding: 10px;
-      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+      border-radius: 10px;
+      margin-top: 15px;
+      text-align: left;
       white-space: pre-line;
-      flex-shrink: 0;
-      aspect-ratio: 1 / 1; /* квадрат */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      font-size: 13px;
-      overflow-wrap: break-word;
+      max-height: 200px;
+      overflow-y: auto;
     }
-    /* Стиль для выбора языка */
     .lang-switch {
       position: fixed;
-      top: 12px;
-      right: 12px;
-      background: rgba(0,0,0,0.7);
-      border-radius: 12px;
-      padding: 6px 12px;
-      z-index: 1000;
-      user-select: none;
-      font-size: 18px;
-      color: white;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 8px;
+      padding: 5px 10px;
     }
     select {
-      background: transparent;
-      border: none;
+      background: rgba(255,255,255,0.1);
       color: white;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      padding-right: 24px;
-      text-align-last: center;
+      border: 1px solid white;
     }
-    /* Стрелка для селекта */
-    .lang-switch select {
-      background-image:
-        linear-gradient(45deg, transparent 50%, white 50%),
-        linear-gradient(135deg, white 50%, transparent 50%),
-        linear-gradient(to right, #555, #555);
-      background-position:
-        calc(100% - 20px) calc(1em + 2px),
-        calc(100% - 15px) calc(1em + 2px),
-        calc(100% - 25px) 0.5em;
-      background-size: 5px 5px, 5px 5px, 1px 1.5em;
-      background-repeat: no-repeat;
-    }
-    /* Адаптив */
-    @media (max-width: 480px) {
-      input, button {
-        font-size: 16px;
-        padding: 12px;
-      }
-      .lang-switch {
-        font-size: 16px;
-        padding: 5px 10px;
-      }
-      .lang-switch select {
-        font-size: 16px;
-        padding-right: 20px;
-      }
-      .entries-container {
-        height: 140px;
-      }
-      .entries-section {
-        font-size: 12px;
-      }
-      .entry-card {
-        font-size: 11px;
-        padding: 8px;
-      }
+    select option {
+      background: black;
+      color: white;
     }
   </style>
 </head>
 <body>
 
-  <div class="lang-switch" title="Выберите язык">
-    <select id="lang-select" aria-label="Выбор языка">
+  <div class="lang-switch">
+    <select id="lang-select">
       <option value="ru">🇷🇺 Русский</option>
       <option value="uk">🇺🇦 Українська</option>
       <option value="en">🇬🇧 English</option>
@@ -215,6 +99,7 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit" id="btn-buy">Отправить</button>
     </form>
+    <div class="entry" id="entries-buy"></div>
   </section>
 
   <section>
@@ -226,6 +111,7 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit" id="btn-sell">Отправить</button>
     </form>
+    <div class="entry" id="entries-sell"></div>
   </section>
 
   <section>
@@ -237,23 +123,8 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit" id="btn-trade">Отправить</button>
     </form>
+    <div class="entry" id="entries-trade"></div>
   </section>
-
-  <!-- Контейнер для заявок -->
-  <div class="entries-container" aria-label="Список заявок">
-    <div class="entries-section" id="entries-buy-section" aria-live="polite" aria-label="Заявки на покупку">
-      <h3>📥 Купить</h3>
-      <div id="entries-buy"></div>
-    </div>
-    <div class="entries-section" id="entries-sell-section" aria-live="polite" aria-label="Заявки на продажу">
-      <h3>📤 Продать</h3>
-      <div id="entries-sell"></div>
-    </div>
-    <div class="entries-section" id="entries-trade-section" aria-live="polite" aria-label="Заявки на обмен">
-      <h3>🔁 Обмен</h3>
-      <div id="entries-trade"></div>
-    </div>
-  </div>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -272,8 +143,7 @@
           sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
           trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
         },
-        sendBtn: "Отправить",
-        noRequests: "Заявок пока нет."
+        sendBtn: "Отправить"
       },
       uk: {
         welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
@@ -286,8 +156,7 @@
           sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
           trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
         },
-        sendBtn: "Відправити",
-        noRequests: "Заявок поки немає."
+        sendBtn: "Відправити"
       },
       en: {
         welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
@@ -300,8 +169,7 @@
           sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Discord etc.)"],
           trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Discord etc.)"],
         },
-        sendBtn: "Send",
-        noRequests: "No requests yet."
+        sendBtn: "Send"
       }
     };
 
@@ -337,19 +205,6 @@
       document.getElementById("btn-buy").innerText = t.sendBtn;
       document.getElementById("btn-sell").innerText = t.sendBtn;
       document.getElementById("btn-trade").innerText = t.sendBtn;
-
-      // Обновим тексты "нет заявок"
-      updateNoRequestsText();
-    }
-
-    function updateNoRequestsText() {
-      const containers = ['entries-buy', 'entries-sell', 'entries-trade'];
-      containers.forEach(id => {
-        const container = document.getElementById(id);
-        if(container.innerHTML.trim() === '') {
-          container.textContent = translations[currentLang].noRequests;
-        }
-      });
     }
 
     document.getElementById("lang-select").addEventListener("change", e => {
@@ -357,7 +212,7 @@
       updateTexts();
     });
 
-    // Firebase
+    // Инициализация Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
       authDomain: "gag-4a6bd.firebaseapp.com",
@@ -402,16 +257,25 @@
               text += `${key}: ${entry[key]}\n`;
             }
             const div = document.createElement('div');
-            div.classList.add('entry-card');
+            div.style.border = '1px solid #4caf50';
+            div.style.marginBottom = '10px';
+            div.style.padding = '8px';
+            div.style.borderRadius = '6px';
+            div.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
             div.textContent = text;
             container.appendChild(div);
           });
         } else {
-          container.textContent = translations[currentLang].noRequests;
+          container.textContent = {
+            ru: 'Заявок пока нет.',
+            uk: 'Заявок поки немає.',
+            en: 'No requests yet.'
+          }[currentLang];
         }
       });
     }
 
+    // Обработчики форм
     document.getElementById('form-buy').addEventListener('submit', e => {
       e.preventDefault();
       const inputs = e.target.querySelectorAll('input');
@@ -431,4 +295,34 @@
       const data = {
         item: inputs[0].value.trim(),
         price: inputs[1].value.trim() || '-',
-        nick: inputs[2].
+        nick: inputs[2].value.trim(),
+        contact: inputs[3].value.trim() || '-',
+        time: new Date().toLocaleString()
+      };
+      addEntry('sell', data);
+      e.target.reset();
+    });
+
+    document.getElementById('form-trade').addEventListener('submit', e => {
+      e.preventDefault();
+      const inputs = e.target.querySelectorAll('input');
+      const data = {
+        give: inputs[0].value.trim(),
+        want: inputs[1].value.trim(),
+        nick: inputs[2].value.trim(),
+        contact: inputs[3].value.trim() || '-',
+        time: new Date().toLocaleString()
+      };
+      addEntry('trade', data);
+      e.target.reset();
+    });
+
+    listenEntries('buy', 'entries-buy');
+    listenEntries('sell', 'entries-sell');
+    listenEntries('trade', 'entries-trade');
+
+    // Устанавливаем изначальный язык и тексты
+    updateTexts(ru);
+  </script>
+</body>
+</html>
