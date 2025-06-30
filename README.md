@@ -6,7 +6,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-image: url('https://i.rutab.net/upload/2025/05/news/58564247aca7230a64797173fc4abbb7.webp'); /* Фон из Roblox */
+      background-image: url('https://insider-gaming.com/wp-content/uploads/2025/05/grow-a-garden-update.png'); /* Фон из Roblox */
       background-size: cover;
       font-family: Arial, sans-serif;
       color: white;
