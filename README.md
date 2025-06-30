@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -13,8 +12,7 @@
       color: white;
       text-align: center;
       min-height: 100vh;
-      padding: 10px;
-      padding-bottom: 260px; /* отступ под фиксированный блок заявок */
+      padding: 10px 10px 200px; /* Отступ снизу, чтобы формы не были зафиксированы под заявками */
       box-sizing: border-box;
     }
     .overlay {
@@ -24,6 +22,9 @@
       border-radius: 12px;
       max-width: 700px;
       width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
     section {
       background-color: rgba(0, 0, 0, 0.75);
@@ -33,6 +34,8 @@
       width: 100%;
       border-radius: 15px;
       box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
     input, button {
       width: 100%;
@@ -62,7 +65,68 @@
     button:active {
       transform: scale(1.1);
     }
-    /* Языковой переключатель */
+
+    /* Блоки заявок фиксируем внизу, растягиваем на всю ширину */
+    .entries-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.85);
+      border-top: 3px solid #4caf50;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-sizing: border-box;
+      z-index: 10;
+      height: 180px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Каждый блок заявок (buy, sell, trade) */
+    .entries-section {
+      flex: 1 0 33%;
+      max-width: 33%;
+      margin: 0 5px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      color: #a5d6a7;
+      font-size: 14px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      padding: 6px;
+      /* Чтобы не занимал весь контент и был прокрутка */
+      max-height: 100%;
+    }
+    .entries-section h3 {
+      margin: 5px 0 10px;
+      font-weight: bold;
+      color: #81c784;
+      font-size: 16px;
+      text-align: center;
+      border-bottom: 1px solid #4caf50;
+      padding-bottom: 4px;
+    }
+    /* Карточка заявки квадратная */
+    .entry-card {
+      background-color: rgba(76, 175, 80, 0.2);
+      border: 1px solid #4caf50;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      padding: 10px;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+      white-space: pre-line;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1; /* квадрат */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 13px;
+      overflow-wrap: break-word;
+    }
+    /* Стиль для выбора языка */
     .lang-switch {
       position: fixed;
       top: 12px;
@@ -88,6 +152,7 @@
       padding-right: 24px;
       text-align-last: center;
     }
+    /* Стрелка для селекта */
     .lang-switch select {
       background-image:
         linear-gradient(45deg, transparent 50%, white 50%),
@@ -100,64 +165,11 @@
       background-size: 5px 5px, 5px 5px, 1px 1.5em;
       background-repeat: no-repeat;
     }
-    /* Фиксированный блок заявок внизу */
-    .entries-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0,0,0,0.85);
-      border-top: 3px solid #4caf50;
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding: 10px 12px 20px 12px;
-      box-sizing: border-box;
-      z-index: 10;
-      height: 240px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .entries-section {
-      flex: 0 0 auto;
-      width: 320px;
-      margin: 0 10px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      color: #a5d6a7;
-      font-size: 14px;
-      box-sizing: border-box;
-      overflow-y: auto;
-      padding: 8px 12px;
-      max-height: 100%;
-      border: 1px solid #4caf50;
-      box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-    }
-    .entries-section h3 {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 18px;
-      color: #81c784;
-      flex-shrink: 0;
-    }
     /* Адаптив */
     @media (max-width: 480px) {
       input, button {
         font-size: 16px;
         padding: 12px;
-      }
-      .entries-container {
-        height: 180px;
-        padding-bottom: 16px;
-      }
-      .entries-section {
-        width: 260px;
-        font-size: 12px;
-        margin: 0 6px;
-      }
-      .entries-section h3 {
-        font-size: 16px;
       }
       .lang-switch {
         font-size: 16px;
@@ -166,6 +178,16 @@
       .lang-switch select {
         font-size: 16px;
         padding-right: 20px;
+      }
+      .entries-container {
+        height: 140px;
+      }
+      .entries-section {
+        font-size: 12px;
+      }
+      .entry-card {
+        font-size: 11px;
+        padding: 8px;
       }
     }
   </style>
@@ -217,17 +239,17 @@
     </form>
   </section>
 
-  <!-- Фиксированный блок заявок -->
+  <!-- Контейнер для заявок -->
   <div class="entries-container" aria-label="Список заявок">
-    <div class="entries-section" aria-live="polite" aria-relevant="additions" role="region">
+    <div class="entries-section" id="entries-buy-section" aria-live="polite" aria-label="Заявки на покупку">
       <h3>📥 Купить</h3>
       <div id="entries-buy"></div>
     </div>
-    <div class="entries-section" aria-live="polite" aria-relevant="additions" role="region">
+    <div class="entries-section" id="entries-sell-section" aria-live="polite" aria-label="Заявки на продажу">
       <h3>📤 Продать</h3>
       <div id="entries-sell"></div>
     </div>
-    <div class="entries-section" aria-live="polite" aria-relevant="additions" role="region">
+    <div class="entries-section" id="entries-trade-section" aria-live="polite" aria-label="Заявки на обмен">
       <h3>🔁 Обмен</h3>
       <div id="entries-trade"></div>
     </div>
@@ -240,7 +262,7 @@
   <script>
     const translations = {
       ru: {
-        welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden shop! 🌻",
+        welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
         welcomeDesc: "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
         buyTitle: "📥 Купить",
         sellTitle: "📤 Продать",
@@ -254,7 +276,7 @@
         noRequests: "Заявок пока нет."
       },
       uk: {
-        welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden shop! 🌻",
+        welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
         welcomeDesc: "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
         buyTitle: "📥 Купити",
         sellTitle: "📤 Продати",
@@ -268,7 +290,7 @@
         noRequests: "Заявок поки немає."
       },
       en: {
-        welcomeTitle: "🌱 Welcome to the Grow a Garden shop website! 🌻",
+        welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
         welcomeDesc: "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
         buyTitle: "📥 Buy",
         sellTitle: "📤 Sell",
@@ -335,7 +357,7 @@
       updateTexts();
     });
 
-    // Firebase config
+    // Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
       authDomain: "gag-4a6bd.firebaseapp.com",
@@ -349,7 +371,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Discord webhook
     const discordWebhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
     function addEntry(type, data) {
@@ -381,12 +402,7 @@
               text += `${key}: ${entry[key]}\n`;
             }
             const div = document.createElement('div');
-            div.style.border = '1px solid #4caf50';
-            div.style.marginBottom = '10px';
-            div.style.padding = '12px';
-            div.style.borderRadius = '8px';
-            div.style.backgroundColor = 'rgba(76, 175, 80, 0.15)';
-            div.style.boxShadow = '0 0 10px rgba(76, 175, 80, 0.5)';
+            div.classList.add('entry-card');
             div.textContent = text;
             container.appendChild(div);
           });
@@ -396,5 +412,23 @@
       });
     }
 
-    // Form submit handlers
-   
+    document.getElementById('form-buy').addEventListener('submit', e => {
+      e.preventDefault();
+      const inputs = e.target.querySelectorAll('input');
+      const data = {
+        item: inputs[0].value.trim(),
+        nick: inputs[1].value.trim(),
+        contact: inputs[2].value.trim() || '-',
+        time: new Date().toLocaleString()
+      };
+      addEntry('buy', data);
+      e.target.reset();
+    });
+
+    document.getElementById('form-sell').addEventListener('submit', e => {
+      e.preventDefault();
+      const inputs = e.target.querySelectorAll('input');
+      const data = {
+        item: inputs[0].value.trim(),
+        price: inputs[1].value.trim() || '-',
+        nick: inputs[2].
