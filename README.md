@@ -122,7 +122,7 @@
       <input type="text" placeholder="Что хотите продать?" required><br>
       <input type="text" placeholder="Цена (по желанию)"><br>
       <input type="text" placeholder="Ваш Roblox ник" required><br>
-      <input type="text" placeholder="Контакт (Discord и т.п.)"><br>
+      <input type="text" placeholder="Контакт (Discord, Telegram и т.п.)"><br>
       <button class="form-btn">Отправить</button>
     </form>
   </section>
@@ -134,7 +134,7 @@
       <input type="text" placeholder="Что вы даёте?" required><br>
       <input type="text" placeholder="Что хотите взамен?" required><br>
       <input type="text" placeholder="Ваш Roblox ник" required><br>
-      <input type="text" placeholder="Контакт для связи"><br>
+      <input type="text" placeholder="Контакт (Discord, Telegram и т.п.)"><br>
       <button class="form-btn">Отправить</button>
     </form>
   </section>
