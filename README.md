@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -159,7 +159,7 @@
   </section>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbxRPv_2wa6-FdHkOwihGblH-erTVc1-VfzGwUctml8yLimUUTiVrFQLFLPVZWspYRKB1A/exec";
+    const endpoint = "https://script.google.com/macros/library/d/1ShSZZJ_a64DzLOUFbeQ41xOcj1r7vtH7iH7NfMeXKTMReve780bzUHeC/1";
 
     function addEntry(event, type) {
       event.preventDefault();
