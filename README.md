@@ -48,13 +48,19 @@
     button:active {
       transform: scale(1.1);
     }
-    .entry {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 10px;
-      border-radius: 10px;
+    .entry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-top: 15px;
+    }
+    .entry {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 12px;
+      border-radius: 10px;
       text-align: left;
       white-space: pre-line;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -73,7 +79,7 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries-buy"></div>
+    <div class="entry-list" id="entries-buy"></div>
   </section>
 
   <section>
@@ -85,7 +91,7 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries-sell"></div>
+    <div class="entry-list" id="entries-sell"></div>
   </section>
 
   <section>
@@ -97,23 +103,26 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries-trade"></div>
+    <div class="entry-list" id="entries-trade"></div>
   </section>
 
   <script>
-    const webhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB"; // ← замени на свой Discord webhook
+    const webhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
     function sendForm(e, type) {
       e.preventDefault();
       const inputs = e.target.querySelectorAll("input");
       let message = `📝 Заявка: ${type.toUpperCase()}\n`;
 
-      inputs.forEach((input) => {
+      inputs.forEach(input => {
         message += `**${input.placeholder}**: ${input.value}\n`;
       });
 
-      // Показываем на сайте
-      document.getElementById(`entries-${type}`).innerText = message;
+      // Отображение карточки на сайте
+      const entryDiv = document.createElement('div');
+      entryDiv.className = 'entry';
+      entryDiv.innerText = message;
+      document.getElementById(`entries-${type}`).appendChild(entryDiv);
 
       // Отправка в Discord
       fetch(webhook, {
@@ -122,7 +131,7 @@
         body: JSON.stringify({ content: message }),
       });
 
-      inputs.forEach((input) => (input.value = ""));
+      inputs.forEach(input => input.value = "");
     }
   </script>
 
