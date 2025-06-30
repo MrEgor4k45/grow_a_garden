@@ -14,8 +14,8 @@
       text-align: center;
       min-height: 100vh;
       padding: 10px;
+      padding-bottom: 260px; /* отступ под фиксированный блок заявок */
       box-sizing: border-box;
-      padding-bottom: 240px; /* пространство под заявки снизу */
     }
     .overlay {
       background: rgba(0, 0, 0, 0.7);
@@ -88,7 +88,6 @@
       padding-right: 24px;
       text-align-last: center;
     }
-    /* Стрелка для селекта */
     .lang-switch select {
       background-image:
         linear-gradient(45deg, transparent 50%, white 50%),
@@ -101,22 +100,7 @@
       background-size: 5px 5px, 5px 5px, 1px 1.5em;
       background-repeat: no-repeat;
     }
-    /* Адаптив */
-    @media (max-width: 480px) {
-      input, button {
-        font-size: 16px;
-        padding: 12px;
-      }
-      .lang-switch {
-        font-size: 16px;
-        padding: 5px 10px;
-      }
-      .lang-switch select {
-        font-size: 16px;
-        padding-right: 20px;
-      }
-    }
-    /* Нижний блок заявок в один ряд */
+    /* Фиксированный блок заявок внизу */
     .entries-container {
       position: fixed;
       bottom: 0;
@@ -127,16 +111,16 @@
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
-      padding: 10px 0 0 0;
+      padding: 10px 12px 20px 12px;
       box-sizing: border-box;
       z-index: 10;
-      height: 220px;
+      height: 240px;
       -webkit-overflow-scrolling: touch;
     }
     .entries-section {
       flex: 0 0 auto;
       width: 320px;
-      margin: 0 8px;
+      margin: 0 10px;
       background-color: rgba(0, 0, 0, 0.6);
       border-radius: 12px;
       display: flex;
@@ -145,10 +129,44 @@
       font-size: 14px;
       box-sizing: border-box;
       overflow-y: auto;
-      padding: 6px 12px;
+      padding: 8px 12px;
       max-height: 100%;
       border: 1px solid #4caf50;
       box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    }
+    .entries-section h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #81c784;
+      flex-shrink: 0;
+    }
+    /* Адаптив */
+    @media (max-width: 480px) {
+      input, button {
+        font-size: 16px;
+        padding: 12px;
+      }
+      .entries-container {
+        height: 180px;
+        padding-bottom: 16px;
+      }
+      .entries-section {
+        width: 260px;
+        font-size: 12px;
+        margin: 0 6px;
+      }
+      .entries-section h3 {
+        font-size: 16px;
+      }
+      .lang-switch {
+        font-size: 16px;
+        padding: 5px 10px;
+      }
+      .lang-switch select {
+        font-size: 16px;
+        padding-right: 20px;
+      }
     }
   </style>
 </head>
@@ -199,18 +217,19 @@
     </form>
   </section>
 
+  <!-- Фиксированный блок заявок -->
   <div class="entries-container" aria-label="Список заявок">
-    <div class="entries-section">
-      <h3 id="entries-title-buy">📥 Купить</h3>
-      <div id="entries-buy" aria-live="polite"></div>
+    <div class="entries-section" aria-live="polite" aria-relevant="additions" role="region">
+      <h3>📥 Купить</h3>
+      <div id="entries-buy"></div>
     </div>
-    <div class="entries-section">
-      <h3 id="entries-title-sell">📤 Продать</h3>
-      <div id="entries-sell" aria-live="polite"></div>
+    <div class="entries-section" aria-live="polite" aria-relevant="additions" role="region">
+      <h3>📤 Продать</h3>
+      <div id="entries-sell"></div>
     </div>
-    <div class="entries-section">
-      <h3 id="entries-title-trade">🔁 Обмен</h3>
-      <div id="entries-trade" aria-live="polite"></div>
+    <div class="entries-section" aria-live="polite" aria-relevant="additions" role="region">
+      <h3>🔁 Обмен</h3>
+      <div id="entries-trade"></div>
     </div>
   </div>
 
@@ -276,10 +295,6 @@
       document.getElementById("title-sell").innerText = t.sellTitle;
       document.getElementById("title-trade").innerText = t.tradeTitle;
 
-      document.getElementById("entries-title-buy").innerText = t.buyTitle;
-      document.getElementById("entries-title-sell").innerText = t.sellTitle;
-      document.getElementById("entries-title-trade").innerText = t.tradeTitle;
-
       // placeholders
       const formBuyInputs = document.querySelectorAll("#form-buy input");
       t.placeholders.buy.forEach((ph, i) => {
@@ -320,7 +335,7 @@
       updateTexts();
     });
 
-    // Firebase
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
       authDomain: "gag-4a6bd.firebaseapp.com",
@@ -334,6 +349,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Discord webhook
     const discordWebhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
     function addEntry(type, data) {
@@ -380,17 +396,5 @@
       });
     }
 
-    document.getElementById('form-buy').addEventListener('submit', e => {
-      e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      const data = {
-        item: inputs[0].value.trim(),
-        nick: inputs[1].value.trim(),
-        contact: inputs[2].value.trim() || '-',
-        time: new Date().toLocaleString()
-      };
-      addEntry('buy', data);
-      e.target.reset();
-    });
-
-    document.getElementById('form-sell').addEventListener('submit', e =>
+    // Form submit handlers
+   
