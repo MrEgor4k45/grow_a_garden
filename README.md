@@ -101,7 +101,7 @@
   </section>
 
   <script>
-    const webhook = "YOUR_WEBHOOK_URL"; // ← замени на свой Discord webhook
+    const webhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB"; // ← замени на свой Discord webhook
 
     function sendForm(e, type) {
       e.preventDefault();
