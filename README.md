@@ -77,7 +77,7 @@
       <input type="text" placeholder="Что хотите купить?" required>
       <input type="text" placeholder="Ваш Roblox ник" required>
       <input type="text" placeholder="Контакт (Discord и т.п.)">
-      <button type="submit">Отправить</button>
+      <button type="submit" id="submit-buy">Отправить</button>
     </form>
     <div class="entry" id="entries-buy"></div>
   </section>
@@ -89,7 +89,7 @@
       <input type="text" placeholder="Цена (по желанию)">
       <input type="text" placeholder="Ваш Roblox ник" required>
       <input type="text" placeholder="Контакт (Discord и т.п.)">
-      <button type="submit">Отправить</button>
+      <button type="submit" id="submit-sell">Отправить</button>
     </form>
     <div class="entry" id="entries-sell"></div>
   </section>
@@ -101,7 +101,7 @@
       <input type="text" placeholder="Что хотите взамен?" required>
       <input type="text" placeholder="Ваш Roblox ник" required>
       <input type="text" placeholder="Контакт (Discord и т.п.)">
-      <button type="submit">Отправить</button>
+      <button type="submit" id="submit-trade">Отправить</button>
     </form>
     <div class="entry" id="entries-trade"></div>
   </section>
@@ -130,14 +130,32 @@
     }
 
     function switchLang(lang) {
-      const titles = {
-        ru: ["📥 Купить", "📤 Продать", "🔁 Обмен"],
-        uk: ["📥 Купити", "📤 Продати", "🔁 Обмін"],
-        en: ["📥 Buy", "📤 Sell", "🔁 Trade"]
+      const translations = {
+        ru: {
+          buy: "📥 Купить",
+          sell: "📤 Продать",
+          trade: "🔁 Обмен",
+          submit: "Отправить"
+        },
+        uk: {
+          buy: "📥 Купити",
+          sell: "📤 Продати",
+          trade: "🔁 Обмін",
+          submit: "Надіслати"
+        },
+        en: {
+          buy: "📥 Buy",
+          sell: "📤 Sell",
+          trade: "🔁 Trade",
+          submit: "Submit"
+        }
       };
-      document.getElementById("title").innerText = titles[lang][0];
-      document.getElementById("title-sell").innerText = titles[lang][1];
-      document.getElementById("title-trade").innerText = titles[lang][2];
+      document.getElementById("title").innerText = translations[lang].buy;
+      document.getElementById("title-sell").innerText = translations[lang].sell;
+      document.getElementById("title-trade").innerText = translations[lang].trade;
+      document.getElementById("submit-buy").innerText = translations[lang].submit;
+      document.getElementById("submit-sell").innerText = translations[lang].submit;
+      document.getElementById("submit-trade").innerText = translations[lang].submit;
     }
   </script>
 </body>
