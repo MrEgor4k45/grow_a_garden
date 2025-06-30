@@ -38,13 +38,13 @@
       border-radius: 8px;
       border: none;
       font-size: 16px;
+      transition: transform 0.2s ease;
     }
     button {
       background-color: #4caf50;
       color: white;
       cursor: pointer;
       font-weight: bold;
-      transition: transform 0.2s ease;
     }
     button:hover {
       background-color: #3e8e41;
@@ -95,6 +95,7 @@
       border-radius: 5px;
       border: none;
       font-size: 16px;
+      transition: transform 0.2s ease;
     }
     #auth-box button {
       width: 94%;
@@ -136,9 +137,14 @@
       background-color: #4285F4;
       margin-top: 10px;
       font-weight: normal;
+      transition: transform 0.2s ease;
     }
     #google-signin:hover {
       background-color: #357ae8;
+      transform: scale(1.05);
+    }
+    #google-signin:active {
+      transform: scale(1.1);
     }
     #signout-btn {
       margin-top: 15px;
@@ -287,11 +293,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // Замените на свои параметры Firebase
+    // Your Firebase config here
     const firebaseConfig = {
-      apiKey: "ВАШ_API_КЛЮЧ",
-      authDomain: "ВАШ_ДОМЕН.firebaseapp.com",
-      projectId: "ВАШ_ID_ПРОЕКТА",
+      apiKey: "AIzaSyBCc5QznggRnp6LFFJuLMIcjyrle7_R_eE",
+      authDomain: "grow-shop-c21eb.firebaseapp.com",
+      projectId: "grow-shop-c21eb",
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -308,7 +314,7 @@
       messageEl.textContent = '';
 
       if (!email || !password) {
-        messageEl.textContent = 'Please enter email and password.';
+        messageEl.textContent = translations[currentLang].pleaseEnterEmailPassword;
         return;
       }
 
@@ -316,7 +322,7 @@
         auth.createUserWithEmailAndPassword(email, password)
           .then(() => {
             messageEl.style.color = 'lime';
-            messageEl.textContent = 'Registration successful! You can now sign in.';
+            messageEl.textContent = translations[currentLang].registrationSuccess;
           })
           .catch(e => {
             messageEl.textContent = e.message;
@@ -325,7 +331,7 @@
         auth.signInWithEmailAndPassword(email, password)
           .then(() => {
             messageEl.style.color = 'lime';
-            messageEl.textContent = 'Signed in successfully!';
+            messageEl.textContent = translations[currentLang].signedInSuccess;
             showMainContent();
           })
           .catch(e => {
@@ -336,10 +342,19 @@
 
     function toggleAuth() {
       isRegister = !isRegister;
-      document.getElementById('auth-title').textContent = isRegister ? 'Register' : 'Sign In';
-      document.getElementById('email-password-btn').textContent = isRegister ? 'Register' : 'Sign In';
-      document.getElementById('toggle-text').textContent = isRegister ? 'Already have an account?' : "Don't have an account?";
+      updateAuthTexts();
       document.getElementById('auth-message').textContent = '';
+    }
+
+    function updateAuthTexts() {
+      const t = translations[currentLang];
+      document.getElementById('auth-title').innerText = isRegister ? t.register : t.signIn;
+      document.getElementById('email-password-btn').innerText = isRegister ? t.register : t.signIn;
+      document.getElementById('toggle-text').innerText = isRegister ? t.alreadyAccount : t.noAccount;
+      document.getElementById('auth-toggle').querySelector('a').innerText = isRegister ? t.signIn : t.register;
+      document.getElementById('google-signin').innerText = t.signInWithGoogle;
+      document.getElementById('email').placeholder = t.emailPlaceholder;
+      document.getElementById('password').placeholder = t.passwordPlaceholder;
     }
 
     function showMainContent() {
@@ -355,8 +370,9 @@
           document.getElementById('auth-message').textContent = '';
         })
         .catch(e => {
-          document.getElementById('auth-message').style.color = '#f44336';
-          document.getElementById('auth-message').textContent = e.message;
+          const messageEl = document.getElementById('auth-message');
+          messageEl.style.color = '#f44336';
+          messageEl.textContent = e.message;
         });
     }
 
@@ -400,88 +416,91 @@
       inputs.forEach((input) => (input.value = ""));
     }
 
-    function switchLang(lang) {
-      const translations = {
-        ru: {
-          welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
-          welcomeSubtitle:
-            "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
-          buy: "📥 Купить",
-          sell: "📤 Продать",
-          trade: "🔁 Обмен",
-          submit: "Отправить",
-          item: "Что хотите купить?",
-          nick: "Ваш Roblox ник",
-          contact: "Контакт (Discord и т.п.)",
-          price: "Цена (по желанию)",
-          give: "Что вы даёте?",
-          want: "Что хотите взамен?",
-          register: "Регистрация",
-          signIn: "Войти",
-          alreadyAccount: "Уже есть аккаунт?",
-          noAccount: "Нет аккаунта?",
-          signInWithGoogle: "Войти через Google",
-          signOut: "Выйти",
-          emailPlaceholder: "Электронная почта",
-          passwordPlaceholder: "Пароль",
-          pleaseEnterEmailPassword: "Пожалуйста, введите email и пароль.",
-          registrationSuccess: "Регистрация успешна! Теперь вы можете войти.",
-          signedInSuccess: "Вход выполнен успешно!",
-        },
-        uk: {
-          welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
-          welcomeSubtitle:
-            "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
-          buy: "📥 Купити",
-          sell: "📤 Продати",
-          trade: "🔁 Обмін",
-          submit: "Надіслати",
-          item: "Що бажаєте купити?",
-          nick: "Ваш Roblox нік",
-          contact: "Контакт (Discord тощо)",
-          price: "Ціна (за бажанням)",
-          give: "Що ви віддаєте?",
-          want: "Що хочете натомість?",
-          register: "Реєстрація",
-          signIn: "Увійти",
-          alreadyAccount: "Вже маєте акаунт?",
-          noAccount: "Нема акаунта?",
-          signInWithGoogle: "Увійти через Google",
-          signOut: "Вийти",
-          emailPlaceholder: "Електронна пошта",
-          passwordPlaceholder: "Пароль",
-          pleaseEnterEmailPassword: "Будь ласка, введіть email і пароль.",
-          registrationSuccess: "Реєстрація успішна! Тепер можете увійти.",
-          signedInSuccess: "Увійшли успішно!",
-        },
-        en: {
-          welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
-          welcomeSubtitle:
-            "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
-          buy: "📥 Buy",
-          sell: "📤 Sell",
-          trade: "🔁 Trade",
-          submit: "Submit",
-          item: "What do you want to buy?",
-          nick: "Your Roblox nickname",
-          contact: "Contact (Discord etc.)",
-          price: "Price (optional)",
-          give: "What are you giving?",
-          want: "What do you want in return?",
-          register: "Register",
-          signIn: "Sign In",
-          alreadyAccount: "Already have an account?",
-          noAccount: "Don't have an account?",
-          signInWithGoogle: "Sign in with Google",
-          signOut: "Sign Out",
-          emailPlaceholder: "Email",
-          passwordPlaceholder: "Password",
-          pleaseEnterEmailPassword: "Please enter email and password.",
-          registrationSuccess: "Registration successful! You can now sign in.",
-          signedInSuccess: "Signed in successfully!",
-        },
-      };
+    const translations = {
+      ru: {
+        welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
+        welcomeSubtitle:
+          "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
+        buy: "📥 Купить",
+        sell: "📤 Продать",
+        trade: "🔁 Обмен",
+        submit: "Отправить",
+        item: "Что хотите купить?",
+        nick: "Ваш Roblox ник",
+        contact: "Контакт (Discord и т.п.)",
+        price: "Цена (по желанию)",
+        give: "Что вы даёте?",
+        want: "Что хотите взамен?",
+        register: "Регистрация",
+        signIn: "Войти",
+        alreadyAccount: "Уже есть аккаунт?",
+        noAccount: "Нет аккаунта?",
+        signInWithGoogle: "Войти через Google",
+        signOut: "Выйти",
+        emailPlaceholder: "Электронная почта",
+        passwordPlaceholder: "Пароль",
+        pleaseEnterEmailPassword: "Пожалуйста, введите email и пароль.",
+        registrationSuccess: "Регистрация успешна! Теперь вы можете войти.",
+        signedInSuccess: "Вход выполнен успешно!",
+      },
+      uk: {
+        welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
+        welcomeSubtitle:
+          "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
+        buy: "📥 Купити",
+        sell: "📤 Продати",
+        trade: "🔁 Обмін",
+        submit: "Надіслати",
+        item: "Що бажаєте купити?",
+        nick: "Ваш Roblox нік",
+        contact: "Контакт (Discord тощо)",
+        price: "Ціна (за бажанням)",
+        give: "Що ви віддаєте?",
+        want: "Що хочете натомість?",
+        register: "Реєстрація",
+        signIn: "Увійти",
+        alreadyAccount: "Вже маєте акаунт?",
+        noAccount: "Нема акаунта?",
+        signInWithGoogle: "Увійти через Google",
+        signOut: "Вийти",
+        emailPlaceholder: "Електронна пошта",
+        passwordPlaceholder: "Пароль",
+        pleaseEnterEmailPassword: "Будь ласка, введіть email і пароль.",
+        registrationSuccess: "Реєстрація успішна! Тепер можете увійти.",
+        signedInSuccess: "Увійшли успішно!",
+      },
+      en: {
+        welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
+        welcomeSubtitle:
+          "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
+        buy: "📥 Buy",
+        sell: "📤 Sell",
+        trade: "🔁 Trade",
+        submit: "Submit",
+        item: "What do you want to buy?",
+        nick: "Your Roblox nickname",
+        contact: "Contact (Discord etc.)",
+        price: "Price (optional)",
+        give: "What are you giving?",
+        want: "What do you want in return?",
+        register: "Register",
+        signIn: "Sign In",
+        alreadyAccount: "Already have an account?",
+        noAccount: "Don't have an account?",
+        signInWithGoogle: "Sign in with Google",
+        signOut: "Sign Out",
+        emailPlaceholder: "Email",
+        passwordPlaceholder: "Password",
+        pleaseEnterEmailPassword: "Please enter email and password.",
+        registrationSuccess: "Registration successful! You can now sign in.",
+        signedInSuccess: "Signed in successfully!",
+      },
+    };
 
+    let currentLang = 'en';
+
+    function switchLang(lang) {
+      currentLang = lang;
       const t = translations[lang];
 
       document.getElementById("welcome-title").innerText = t.welcomeTitle;
@@ -492,18 +511,4 @@
       document.getElementById("title-trade").innerText = t.trade;
 
       document.getElementById("submit-buy").innerText = t.submit;
-      document.getElementById("submit-sell").innerText = t.submit;
-      document.getElementById("submit-trade").innerText = t.submit;
-
-      document.querySelectorAll("input").forEach((input) => {
-        const key = input.dataset.placeholder;
-        if (t[key]) {
-          input.placeholder = t[key];
-        }
-      });
-
-      document.getElementById('auth-title').innerText = isRegister ? t.register : t.signIn;
-      document.getElementById('email-password-btn').innerText = isRegister ? t.register : t.signIn;
-      document.getElementById('toggle-text').innerText = isRegister ? t.alreadyAccount : t.noAccount;
-      document.getElementById('google-signin').innerText = t.signInWithGoogle;
-      document.getElementById('signout-btn').innerText = t.signOut
+      document.getElementById
