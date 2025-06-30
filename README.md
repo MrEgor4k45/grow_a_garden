@@ -12,7 +12,6 @@
       color: white;
       text-align: center;
     }
-
     .overlay {
       background: rgba(0, 0, 0, 0.7);
       padding: 20px;
@@ -20,7 +19,6 @@
       border-radius: 12px;
       max-width: 700px;
     }
-
     section {
       background-color: rgba(0, 0, 0, 0.75);
       padding: 20px;
@@ -28,7 +26,6 @@
       max-width: 600px;
       border-radius: 15px;
     }
-
     input, button {
       width: 90%;
       padding: 10px;
@@ -37,7 +34,6 @@
       border: none;
       font-size: 16px;
     }
-
     button {
       background-color: #4caf50;
       color: white;
@@ -45,16 +41,13 @@
       font-weight: bold;
       transition: transform 0.2s ease;
     }
-
     button:hover {
       background-color: #3e8e41;
       transform: scale(1.05);
     }
-
     button:active {
       transform: scale(1.1);
     }
-
     .entry {
       background-color: rgba(255, 255, 255, 0.1);
       padding: 10px;
@@ -108,7 +101,7 @@
   </section>
 
   <script>
-    const webhook = "https://discord.com/api/webhooks/ВАШ_WEBHOOK";
+    const webhook = "YOUR_WEBHOOK_URL"; // ← замени на свой Discord webhook
 
     function sendForm(e, type) {
       e.preventDefault();
@@ -119,15 +112,17 @@
         message += `**${input.placeholder}**: ${input.value}\n`;
       });
 
+      // Показываем на сайте
       document.getElementById(`entries-${type}`).innerText = message;
 
+      // Отправка в Discord
       fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: message }),
       });
 
-      inputs.forEach((input) => input.value = "");
+      inputs.forEach((input) => (input.value = ""));
     }
   </script>
 
