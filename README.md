@@ -287,11 +287,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // TODO: Замените на свои параметры Firebase!
+    // Замените на свои параметры Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyBCc5QznggRnp6LFFJuLMIcjyrle7_R_eE",
-      authDomain: "grow-shop-c21eb.firebaseapp.com",
-      projectId: "grow-shop-c21eb",
+      apiKey: "ВАШ_API_КЛЮЧ",
+      authDomain: "ВАШ_ДОМЕН.firebaseapp.com",
+      projectId: "ВАШ_ID_ПРОЕКТА",
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -347,7 +347,6 @@
       document.getElementById('main-content').classList.remove('hidden');
     }
 
-    // Google sign-in
     function googleSignIn() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
@@ -369,7 +368,6 @@
       });
     }
 
-    // Check auth state on load
     auth.onAuthStateChanged(user => {
       if (user) {
         showMainContent();
@@ -379,7 +377,6 @@
       }
     });
 
-    // Discord webhook URL
     const webhook =
       "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
@@ -403,7 +400,6 @@
       inputs.forEach((input) => (input.value = ""));
     }
 
-    // Translations & language switch
     function switchLang(lang) {
       const translations = {
         ru: {
@@ -509,4 +505,5 @@
       document.getElementById('auth-title').innerText = isRegister ? t.register : t.signIn;
       document.getElementById('email-password-btn').innerText = isRegister ? t.register : t.signIn;
       document.getElementById('toggle-text').innerText = isRegister ? t.alreadyAccount : t.noAccount;
-      document.getElementById('google-signin').innerText =
+      document.getElementById('google-signin').innerText = t.signInWithGoogle;
+      document.getElementById('signout-btn').innerText = t.signOut
