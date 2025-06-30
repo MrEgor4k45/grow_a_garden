@@ -12,7 +12,7 @@
       color: white;
       text-align: center;
       min-height: 100vh;
-      padding: 10px;
+      padding: 10px 10px 220px; /* Отступ снизу для заявок */
       box-sizing: border-box;
     }
     .overlay {
@@ -22,6 +22,9 @@
       border-radius: 12px;
       max-width: 700px;
       width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
     section {
       background-color: rgba(0, 0, 0, 0.75);
@@ -31,6 +34,8 @@
       width: 100%;
       border-radius: 15px;
       box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
     input, button {
       width: 100%;
@@ -60,18 +65,86 @@
     button:active {
       transform: scale(1.1);
     }
-    .entry {
-      background-color: rgba(76, 175, 80, 0.15);
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 15px;
-      text-align: left;
-      white-space: pre-line;
-      max-height: 250px;
+
+    /* Блоки заявок фиксируем внизу, растягиваем на всю ширину */
+    .entries-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.85);
+      border-top: 3px solid #4caf50;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 0 0;
+      box-sizing: border-box;
+      z-index: 10;
+      height: 220px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Каждый блок заявок (buy, sell, trade) */
+    .entries-section {
+      flex: 1 0 33%;
+      max-width: 33%;
+      margin: 0 5px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      color: #a5d6a7;
+      font-size: 14px;
+      box-sizing: border-box;
       overflow-y: auto;
+      padding: 6px;
+      max-height: 100%;
+    }
+    .entries-section h3 {
+      margin: 5px 0 6px;
+      font-weight: bold;
+      color: #81c784;
       font-size: 16px;
+      text-align: center;
+      border-bottom: 1px solid #4caf50;
+      padding-bottom: 4px;
+      user-select: none;
+    }
+
+    /* Поисковое поле внутри блока заявок */
+    .search-input {
+      margin: 6px 10px 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
       border: 1px solid #4caf50;
-      box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+      background-color: rgba(76, 175, 80, 0.1);
+      color: white;
+      font-size: 14px;
+      outline: none;
+      transition: background-color 0.3s ease;
+    }
+    .search-input::placeholder {
+      color: #c8e6c9;
+    }
+    .search-input:focus {
+      background-color: rgba(76, 175, 80, 0.25);
+    }
+
+    /* Карточка заявки квадратная */
+    .entry-card {
+      background-color: rgba(76, 175, 80, 0.2);
+      border: 1px solid #4caf50;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      padding: 10px;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+      white-space: pre-line;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1; /* квадрат */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 13px;
+      overflow-wrap: break-word;
     }
     /* Стиль для выбора языка */
     .lang-switch {
@@ -118,10 +191,6 @@
         font-size: 16px;
         padding: 12px;
       }
-      .entry {
-        font-size: 14px;
-        max-height: 180px;
-      }
       .lang-switch {
         font-size: 16px;
         padding: 5px 10px;
@@ -129,6 +198,19 @@
       .lang-switch select {
         font-size: 16px;
         padding-right: 20px;
+      }
+      .entries-container {
+        height: 180px;
+      }
+      .entries-section {
+        font-size: 12px;
+      }
+      .entry-card {
+        font-size: 11px;
+        padding: 8px;
+      }
+      .search-input {
+        font-size: 12px;
       }
     }
   </style>
@@ -156,7 +238,6 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit" id="btn-buy">Отправить</button>
     </form>
-    <div class="entry" id="entries-buy" aria-live="polite"></div>
   </section>
 
   <section>
@@ -168,7 +249,6 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit" id="btn-sell">Отправить</button>
     </form>
-    <div class="entry" id="entries-sell" aria-live="polite"></div>
   </section>
 
   <section>
@@ -180,8 +260,26 @@
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
       <button type="submit" id="btn-trade">Отправить</button>
     </form>
-    <div class="entry" id="entries-trade" aria-live="polite"></div>
   </section>
+
+  <!-- Контейнер для заявок -->
+  <div class="entries-container" aria-label="Список заявок">
+    <div class="entries-section" id="entries-buy-section" aria-live="polite" aria-label="Заявки на покупку">
+      <h3>📥 Купить</h3>
+      <input type="search" class="search-input" id="search-buy" placeholder="Поиск..." aria-label="Поиск заявок на покупку" />
+      <div id="entries-buy"></div>
+    </div>
+    <div class="entries-section" id="entries-sell-section" aria-live="polite" aria-label="Заявки на продажу">
+      <h3>📤 Продать</h3>
+      <input type="search" class="search-input" id="search-sell" placeholder="Поиск..." aria-label="Поиск заявок на продажу" />
+      <div id="entries-sell"></div>
+    </div>
+    <div class="entries-section" id="entries-trade-section" aria-live="polite" aria-label="Заявки на обмен">
+      <h3>🔁 Обмен</h3>
+      <input type="search" class="search-input" id="search-trade" placeholder="Поиск..." aria-label="Поиск заявок на обмен" />
+      <div id="entries-trade"></div>
+    </div>
+  </div>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -317,81 +415,18 @@
       });
     }
 
-    function listenEntries(type, containerId) {
-      const container = document.getElementById(containerId);
-      const ref = db.ref(type);
-      ref.on('value', (snapshot) => {
-        const val = snapshot.val();
-        container.innerHTML = '';
-        if (val) {
-          Object.values(val).forEach(entry => {
-            let text = '';
-            for (const key in entry) {
-              text += `${key}: ${entry[key]}\n`;
-            }
-            const div = document.createElement('div');
-            div.style.border = '1px solid #4caf50';
-            div.style.marginBottom = '10px';
-            div.style.padding = '12px';
-            div.style.borderRadius = '8px';
-            div.style.backgroundColor = 'rgba(76, 175, 80, 0.15)';
-            div.style.boxShadow = '0 0 10px rgba(76, 175, 80, 0.5)';
-            div.textContent = text;
-            container.appendChild(div);
-          });
-        } else {
-          container.textContent = translations[currentLang].noRequests;
-        }
-      });
-    }
+    // Храним все записи локально, чтобы фильтровать
+    const allEntries = {
+      buy: [],
+      sell: [],
+      trade: []
+    };
 
-    document.getElementById('form-buy').addEventListener('submit', e => {
-      e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      const data = {
-        item: inputs[0].value.trim(),
-        nick: inputs[1].value.trim(),
-        contact: inputs[2].value.trim() || '-',
-        time: new Date().toLocaleString()
-      };
-      addEntry('buy', data);
-      e.target.reset();
-    });
+    function renderEntries(type, entries, filterText = '') {
+      const container = document.getElementById('entries-' + type);
+      container.innerHTML = '';
 
-    document.getElementById('form-sell').addEventListener('submit', e => {
-      e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      const data = {
-        item: inputs[0].value.trim(),
-        price: inputs[1].value.trim() || '-',
-        nick: inputs[2].value.trim(),
-        contact: inputs[3].value.trim() || '-',
-        time: new Date().toLocaleString()
-      };
-      addEntry('sell', data);
-      e.target.reset();
-    });
-
-    document.getElementById('form-trade').addEventListener('submit', e => {
-      e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      const data = {
-        give: inputs[0].value.trim(),
-        want: inputs[1].value.trim(),
-        nick: inputs[2].value.trim(),
-        contact: inputs[3].value.trim() || '-',
-        time: new Date().toLocaleString()
-      };
-      addEntry('trade', data);
-      e.target.reset();
-    });
-
-    listenEntries('buy', 'entries-buy');
-    listenEntries('sell', 'entries-sell');
-    listenEntries('trade', 'entries-trade');
-
-    // Установка начального языка и текстов
-    updateTexts();
-  </script>
-</body>
-</html>
+      let filtered = entries;
+      if(filterText) {
+        const lowerFilter = filterText.toLowerCase();
+       
