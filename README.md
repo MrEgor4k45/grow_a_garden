@@ -132,11 +132,37 @@
     #main-content.hidden {
       display: none;
     }
+    #google-signin {
+      background-color: #4285F4;
+      margin-top: 10px;
+      font-weight: normal;
+    }
+    #google-signin:hover {
+      background-color: #357ae8;
+    }
+    #signout-btn {
+      margin-top: 15px;
+      background:#f44336;
+      width: 120px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    #signout-btn:hover {
+      background: #d32f2f;
+      transform: scale(1.05);
+    }
+    #signout-btn:active {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Языковой переключатель -->
+  <!-- Language switcher -->
   <div class="lang-switch">
     <label for="lang-select">🌐</label>
     <select id="lang-select" onchange="switchLang(this.value)">
@@ -146,12 +172,13 @@
     </select>
   </div>
 
-  <!-- Блок авторизации -->
+  <!-- Auth box -->
   <div id="auth-box">
     <h3 id="auth-title">Register</h3>
     <input id="email" type="email" placeholder="Email" required />
     <input id="password" type="password" placeholder="Password" required />
-    <button onclick="authAction()">Register</button>
+    <button onclick="authAction()" id="email-password-btn">Register</button>
+    <button onclick="googleSignIn()" id="google-signin">Sign in with Google</button>
     <div id="auth-toggle">
       <span id="toggle-text">Already have an account?</span>
       <a onclick="toggleAuth()">Sign In</a>
@@ -159,12 +186,13 @@
     <div id="auth-message"></div>
   </div>
 
-  <!-- Основной контент (показывается только после входа) -->
+  <!-- Main content (visible only after login) -->
   <div id="main-content" class="hidden">
-
     <header>
       <span id="welcome-title">🌱 Welcome to the Grow a Garden website! 🌻</span>
       <small id="welcome-subtitle">Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.</small>
+      <br />
+      <button id="signout-btn" onclick="signOut()">Sign Out</button>
     </header>
 
     <section>
@@ -259,11 +287,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // Замените на свои параметры Firebase!
+    // TODO: Замените на свои параметры Firebase!
     const firebaseConfig = {
-      apiKey: "ВАШ_API_КЛЮЧ",
-      authDomain: "ВАШ_ДОМЕН.firebaseapp.com",
-      projectId: "ВАШ_ID_ПРОЕКТА",
+      apiKey: "AIzaSyBCc5QznggRnp6LFFJuLMIcjyrle7_R_eE",
+      authDomain: "grow-shop-c21eb.firebaseapp.com",
+      projectId: "grow-shop-c21eb",
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -309,7 +337,7 @@
     function toggleAuth() {
       isRegister = !isRegister;
       document.getElementById('auth-title').textContent = isRegister ? 'Register' : 'Sign In';
-      document.querySelector('#auth-box button').textContent = isRegister ? 'Register' : 'Sign In';
+      document.getElementById('email-password-btn').textContent = isRegister ? 'Register' : 'Sign In';
       document.getElementById('toggle-text').textContent = isRegister ? 'Already have an account?' : "Don't have an account?";
       document.getElementById('auth-message').textContent = '';
     }
@@ -319,7 +347,29 @@
       document.getElementById('main-content').classList.remove('hidden');
     }
 
-    // Автоматически проверяем, если пользователь уже вошёл
+    // Google sign-in
+    function googleSignIn() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => {
+          showMainContent();
+          document.getElementById('auth-message').textContent = '';
+        })
+        .catch(e => {
+          document.getElementById('auth-message').style.color = '#f44336';
+          document.getElementById('auth-message').textContent = e.message;
+        });
+    }
+
+    function signOut() {
+      auth.signOut().then(() => {
+        document.getElementById('auth-box').style.display = 'block';
+        document.getElementById('main-content').classList.add('hidden');
+        document.getElementById('auth-message').textContent = '';
+      });
+    }
+
+    // Check auth state on load
     auth.onAuthStateChanged(user => {
       if (user) {
         showMainContent();
@@ -329,7 +379,7 @@
       }
     });
 
-    // Заявки в Discord webhook
+    // Discord webhook URL
     const webhook =
       "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
@@ -353,7 +403,7 @@
       inputs.forEach((input) => (input.value = ""));
     }
 
-    // Переводы и переключение языка
+    // Translations & language switch
     function switchLang(lang) {
       const translations = {
         ru: {
@@ -370,6 +420,17 @@
           price: "Цена (по желанию)",
           give: "Что вы даёте?",
           want: "Что хотите взамен?",
+          register: "Регистрация",
+          signIn: "Войти",
+          alreadyAccount: "Уже есть аккаунт?",
+          noAccount: "Нет аккаунта?",
+          signInWithGoogle: "Войти через Google",
+          signOut: "Выйти",
+          emailPlaceholder: "Электронная почта",
+          passwordPlaceholder: "Пароль",
+          pleaseEnterEmailPassword: "Пожалуйста, введите email и пароль.",
+          registrationSuccess: "Регистрация успешна! Теперь вы можете войти.",
+          signedInSuccess: "Вход выполнен успешно!",
         },
         uk: {
           welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
@@ -385,6 +446,17 @@
           price: "Ціна (за бажанням)",
           give: "Що ви віддаєте?",
           want: "Що хочете натомість?",
+          register: "Реєстрація",
+          signIn: "Увійти",
+          alreadyAccount: "Вже маєте акаунт?",
+          noAccount: "Нема акаунта?",
+          signInWithGoogle: "Увійти через Google",
+          signOut: "Вийти",
+          emailPlaceholder: "Електронна пошта",
+          passwordPlaceholder: "Пароль",
+          pleaseEnterEmailPassword: "Будь ласка, введіть email і пароль.",
+          registrationSuccess: "Реєстрація успішна! Тепер можете увійти.",
+          signedInSuccess: "Увійшли успішно!",
         },
         en: {
           welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
@@ -400,6 +472,17 @@
           price: "Price (optional)",
           give: "What are you giving?",
           want: "What do you want in return?",
+          register: "Register",
+          signIn: "Sign In",
+          alreadyAccount: "Already have an account?",
+          noAccount: "Don't have an account?",
+          signInWithGoogle: "Sign in with Google",
+          signOut: "Sign Out",
+          emailPlaceholder: "Email",
+          passwordPlaceholder: "Password",
+          pleaseEnterEmailPassword: "Please enter email and password.",
+          registrationSuccess: "Registration successful! You can now sign in.",
+          signedInSuccess: "Signed in successfully!",
         },
       };
 
@@ -422,10 +505,8 @@
           input.placeholder = t[key];
         }
       });
-    }
 
-    // Устанавливаем язык по умолчанию
-    switchLang("en");
-  </script>
-</body>
-</html>
+      document.getElementById('auth-title').innerText = isRegister ? t.register : t.signIn;
+      document.getElementById('email-password-btn').innerText = isRegister ? t.register : t.signIn;
+      document.getElementById('toggle-text').innerText = isRegister ? t.alreadyAccount : t.noAccount;
+      document.getElementById('google-signin').innerText =
