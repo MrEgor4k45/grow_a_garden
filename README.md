@@ -1,4 +1,4 @@
-<html lang="ru">
+<html lang="ua">
 <head>
   <meta charset="UTF-8" />
   <title>Grow a Garden | Заявки</title>
