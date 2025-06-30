@@ -322,7 +322,7 @@
     listenEntries('trade', 'entries-trade');
 
     // Устанавливаем изначальный язык и тексты
-    updateTexts(ru);
+    updateTexts(ua);
   </script>
 </body>
 </html>
