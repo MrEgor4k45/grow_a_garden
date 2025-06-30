@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Магазин Grow a Garden</title>
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -57,11 +61,11 @@
     }
 
     section {
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0, 0, 0, 0.85);
       margin: 40px auto;
       padding: 30px;
-      width: 80%;
-      max-width: 500px;
+      width: 90%;
+      max-width: 600px;
       border-radius: 15px;
     }
 
@@ -86,6 +90,18 @@
       background-color: #0b7dda;
     }
 
+    .entries {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .entry {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+
     a {
       text-decoration: none;
     }
@@ -104,39 +120,93 @@
     </div>
   </div>
 
-  <!-- Раздел купить -->
+  <!-- Купить -->
   <section id="buy">
     <h2>📥 Купить</h2>
-    <form>
+    <form onsubmit="addEntry(event, 'buy')">
       <input type="text" placeholder="Что хотите купить?" required><br>
       <input type="text" placeholder="Ваш Roblox ник" required><br>
-      <input type="text" placeholder="Контакт (Discord, Telegram и т.п.)"><br>
-      <button class="form-btn">Отправить</button>
+      <input type="text" placeholder="Контакт (Discord и т.п.)"><br>
+      <button class="form-btn" type="submit">Отправить</button>
     </form>
+    <div class="entries" id="buy-entries"></div>
   </section>
 
-  <!-- Раздел продать -->
+  <!-- Продать -->
   <section id="sell">
     <h2>📤 Продать</h2>
-    <form>
+    <form onsubmit="addEntry(event, 'sell')">
       <input type="text" placeholder="Что хотите продать?" required><br>
       <input type="text" placeholder="Цена (по желанию)"><br>
       <input type="text" placeholder="Ваш Roblox ник" required><br>
-      <input type="text" placeholder="Контакт (Discord, Telegram и т.п.)"><br>
-      <button class="form-btn">Отправить</button>
+      <input type="text" placeholder="Контакт (Discord и т.п.)"><br>
+      <button class="form-btn" type="submit">Отправить</button>
     </form>
+    <div class="entries" id="sell-entries"></div>
   </section>
 
-  <!-- Раздел обмен -->
+  <!-- Обмен -->
   <section id="trade">
     <h2>🔁 Обмен</h2>
-    <form>
+    <form onsubmit="addEntry(event, 'trade')">
       <input type="text" placeholder="Что вы даёте?" required><br>
       <input type="text" placeholder="Что хотите взамен?" required><br>
       <input type="text" placeholder="Ваш Roblox ник" required><br>
-      <input type="text" placeholder="Контакт (Discord, Telegram и т.п.)"><br>
-      <button class="form-btn">Отправить</button>
+      <input type="text" placeholder="Контакт (Discord и т.п.)"><br>
+      <button class="form-btn" type="submit">Отправить</button>
     </form>
+    <div class="entries" id="trade-entries"></div>
   </section>
+
+  <script>
+    function addEntry(event, type) {
+      event.preventDefault();
+      const form = event.target;
+      const inputs = form.querySelectorAll('input');
+      let text = "";
+      inputs.forEach(input => {
+        if (input.value.trim()) {
+          text += `<strong>${input.placeholder}</strong>: ${input.value}<br>`;
+        }
+        input.value = ""; // очистить поле
+      });
+
+      const container = document.getElementById(`${type}-entries`);
+      const div = document.createElement("div");
+      div.className = "entry";
+      div.innerHTML = text;
+      container.prepend(div);
+    }
+  </script>
 </body>
 </html>
+<script>
+  const endpoint = "https://script.google.com/macros/s/AKfycbxRPv_2wa6-FdHkOwihGblH-erTVc1-VfzGwUctml8yLimUUTiVrFQLFLPVZWspYRKB1A/exec"; // заменишь своим
+
+  function addEntry(event, type) {
+    event.preventDefault();
+    const form = event.target;
+    const inputs = form.querySelectorAll('input');
+    let text = "";
+    inputs.forEach(input => {
+      if (input.value.trim()) {
+        text += `${input.placeholder}: ${input.value}\n`;
+      }
+    });
+
+    // Отправка на Google Таблицу
+    fetch(endpoint, {
+      method: "POST",
+      body: JSON.stringify({ type: type, content: text }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res => {
+      alert("✅ Отправлено!");
+    }).catch(err => {
+      alert("❌ Ошибка отправки");
+    });
+
+    inputs.forEach(input => input.value = ""); // очистить форму
+  }
+</script>
