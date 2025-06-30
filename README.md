@@ -1,10 +1,10 @@
 <!-- buy.html -->
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Заявки | Grow a Garden</title>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/Roblox_Logo_2022.svg">
+  <meta charset="UTF-8" />
+  <title>Requests | Grow a Garden</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/Roblox_Logo_2022.svg" />
   <style>
     body {
       margin: 0;
@@ -19,6 +19,11 @@
       padding: 20px;
       font-size: 24px;
     }
+    header small {
+      font-size: 14px;
+      display: block;
+      margin-top: 6px;
+    }
     section {
       background-color: rgba(0, 0, 0, 0.8);
       padding: 30px;
@@ -26,17 +31,20 @@
       max-width: 600px;
       border-radius: 15px;
     }
-    input, button {
+    input,
+    button {
       width: 90%;
       padding: 10px;
       margin: 10px 0;
       border-radius: 8px;
       border: none;
+      font-size: 16px;
     }
     button {
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: white;
       cursor: pointer;
+      font-weight: bold;
     }
     button:hover {
       background-color: #3e8e41;
@@ -47,6 +55,7 @@
       border-radius: 10px;
       margin-top: 15px;
       text-align: left;
+      white-space: pre-line;
     }
     .lang-switch {
       position: fixed;
@@ -54,11 +63,12 @@
       right: 10px;
     }
     select {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       color: white;
       border: 1px solid white;
       border-radius: 6px;
       padding: 5px;
+      font-size: 16px;
     }
     select option {
       background: black;
@@ -67,78 +77,136 @@
   </style>
 </head>
 <body>
-  <header>🌱 Добро пожаловать на сайт Grow a Garden! 🌻<br><small>Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.</small></header>
+  <header>
+    <span id="welcome-title">🌱 Welcome to the Grow a Garden website! 🌻</span>
+    <small id="welcome-subtitle">Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.</small>
+  </header>
 
   <div class="lang-switch">
     <label for="lang-select">🌐</label>
     <select id="lang-select" onchange="switchLang(this.value)">
       <option value="ru">🇷🇺 Русский</option>
       <option value="uk">🇺🇦 Українська</option>
-      <option value="en">🇬🇧 English</option>
+      <option value="en" selected>🇬🇧 English</option>
     </select>
   </div>
 
   <section>
-    <h2 id="title">📥 Купить</h2>
+    <h2 id="title-buy">📥 Buy</h2>
     <form onsubmit="sendForm(event, 'buy')">
-      <input type="text" data-placeholder="item" placeholder="Что хотите купить?" required>
-      <input type="text" data-placeholder="nick" placeholder="Ваш Roblox ник" required>
-      <input type="text" data-placeholder="contact" placeholder="Контакт (Discord и т.п.)">
-      <button type="submit" id="submit-buy">Отправить</button>
+      <input
+        type="text"
+        data-placeholder="item"
+        placeholder="What do you want to buy?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="nick"
+        placeholder="Your Roblox nickname"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="contact"
+        placeholder="Contact (Discord etc.)"
+      />
+      <button type="submit" id="submit-buy">Submit</button>
     </form>
     <div class="entry" id="entries-buy"></div>
   </section>
 
   <section>
-    <h2 id="title-sell">📤 Продать</h2>
+    <h2 id="title-sell">📤 Sell</h2>
     <form onsubmit="sendForm(event, 'sell')">
-      <input type="text" data-placeholder="item" placeholder="Что хотите продать?" required>
-      <input type="text" data-placeholder="price" placeholder="Цена (по желанию)">
-      <input type="text" data-placeholder="nick" placeholder="Ваш Roblox ник" required>
-      <input type="text" data-placeholder="contact" placeholder="Контакт (Discord и т.п.)">
-      <button type="submit" id="submit-sell">Отправить</button>
+      <input
+        type="text"
+        data-placeholder="item"
+        placeholder="What do you want to sell?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="price"
+        placeholder="Price (optional)"
+      />
+      <input
+        type="text"
+        data-placeholder="nick"
+        placeholder="Your Roblox nickname"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="contact"
+        placeholder="Contact (Discord etc.)"
+      />
+      <button type="submit" id="submit-sell">Submit</button>
     </form>
     <div class="entry" id="entries-sell"></div>
   </section>
 
   <section>
-    <h2 id="title-trade">🔁 Обмен</h2>
+    <h2 id="title-trade">🔁 Trade</h2>
     <form onsubmit="sendForm(event, 'trade')">
-      <input type="text" data-placeholder="give" placeholder="Что вы даёте?" required>
-      <input type="text" data-placeholder="want" placeholder="Что хотите взамен?" required>
-      <input type="text" data-placeholder="nick" placeholder="Ваш Roblox ник" required>
-      <input type="text" data-placeholder="contact" placeholder="Контакт (Discord и т.п.)">
-      <button type="submit" id="submit-trade">Отправить</button>
+      <input
+        type="text"
+        data-placeholder="give"
+        placeholder="What are you giving?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="want"
+        placeholder="What do you want in return?"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="nick"
+        placeholder="Your Roblox nickname"
+        required
+      />
+      <input
+        type="text"
+        data-placeholder="contact"
+        placeholder="Contact (Discord etc.)"
+      />
+      <button type="submit" id="submit-trade">Submit</button>
     </form>
     <div class="entry" id="entries-trade"></div>
   </section>
 
   <script>
-    const webhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
+    const webhook =
+      "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
     function sendForm(e, type) {
       e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      let message = `Заявка: ${type.toUpperCase()}\n`;
+      const inputs = e.target.querySelectorAll("input");
+      let message = `Request: ${type.toUpperCase()}\n`;
 
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         message += `**${input.placeholder}**: ${input.value}\n`;
       });
 
-      document.getElementById(`entries-${type}`).innerHTML = message.replaceAll("\n", "<br>");
+      document.getElementById(`entries-${type}`).innerText = message;
 
       fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: message })
+        body: JSON.stringify({ content: message }),
       });
 
-      inputs.forEach(input => input.value = "");
+      inputs.forEach((input) => (input.value = ""));
     }
 
     function switchLang(lang) {
       const translations = {
         ru: {
+          welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
+          welcomeSubtitle:
+            "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
           buy: "📥 Купить",
           sell: "📤 Продать",
           trade: "🔁 Обмен",
@@ -148,9 +216,12 @@
           contact: "Контакт (Discord и т.п.)",
           price: "Цена (по желанию)",
           give: "Что вы даёте?",
-          want: "Что хотите взамен?"
+          want: "Что хотите взамен?",
         },
         uk: {
+          welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
+          welcomeSubtitle:
+            "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
           buy: "📥 Купити",
           sell: "📤 Продати",
           trade: "🔁 Обмін",
@@ -160,9 +231,12 @@
           contact: "Контакт (Discord тощо)",
           price: "Ціна (за бажанням)",
           give: "Що ви віддаєте?",
-          want: "Що хочете натомість?"
+          want: "Що хочете натомість?",
         },
         en: {
+          welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
+          welcomeSubtitle:
+            "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
           buy: "📥 Buy",
           sell: "📤 Sell",
           trade: "🔁 Trade",
@@ -172,24 +246,33 @@
           contact: "Contact (Discord etc.)",
           price: "Price (optional)",
           give: "What are you giving?",
-          want: "What do you want in return?"
-        }
+          want: "What do you want in return?",
+        },
       };
 
-      document.getElementById("title").innerText = translations[lang].buy;
-      document.getElementById("title-sell").innerText = translations[lang].sell;
-      document.getElementById("title-trade").innerText = translations[lang].trade;
-      document.getElementById("submit-buy").innerText = translations[lang].submit;
-      document.getElementById("submit-sell").innerText = translations[lang].submit;
-      document.getElementById("submit-trade").innerText = translations[lang].submit;
+      const t = translations[lang];
 
-      document.querySelectorAll('input').forEach(input => {
+      document.getElementById("welcome-title").innerText = t.welcomeTitle;
+      document.getElementById("welcome-subtitle").innerText = t.welcomeSubtitle;
+
+      document.getElementById("title-buy").innerText = t.buy;
+      document.getElementById("title-sell").innerText = t.sell;
+      document.getElementById("title-trade").innerText = t.trade;
+
+      document.getElementById("submit-buy").innerText = t.submit;
+      document.getElementById("submit-sell").innerText = t.submit;
+      document.getElementById("submit-trade").innerText = t.submit;
+
+      document.querySelectorAll("input").forEach((input) => {
         const key = input.dataset.placeholder;
-        if (translations[lang][key]) {
-          input.placeholder = translations[lang][key];
+        if (t[key]) {
+          input.placeholder = t[key];
         }
       });
     }
+
+    // Инициализация языка по умолчанию - English
+    switchLang("en");
   </script>
 </body>
 </html>
