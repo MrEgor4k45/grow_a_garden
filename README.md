@@ -88,56 +88,23 @@
       color: white;
       text-align: center;
     }
-    #auth-box input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-      transition: transform 0.2s ease;
-    }
-    #auth-box button {
-      width: 94%;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background: #4caf50;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    #auth-box button:hover {
-      background: #3e8e41;
-      transform: scale(1.05);
-    }
-    #auth-box button:active {
-      transform: scale(1.1);
-    }
-    #auth-toggle {
-      margin-top: 15px;
-    }
-    #auth-toggle a {
-      color: #4caf50;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: bold;
-    }
     #auth-message {
       margin-top: 10px;
       min-height: 24px;
       font-weight: bold;
-    }
-    /* Hide main content if not logged in */
-    #main-content.hidden {
-      display: none;
     }
     #google-signin {
       background-color: #4285F4;
       margin-top: 10px;
       font-weight: normal;
       transition: transform 0.2s ease;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
     }
     #google-signin:hover {
       background-color: #357ae8;
@@ -180,15 +147,7 @@
 
   <!-- Auth box -->
   <div id="auth-box">
-    <h3 id="auth-title">Register</h3>
-    <input id="email" type="email" placeholder="Email" required />
-    <input id="password" type="password" placeholder="Password" required />
-    <button onclick="authAction()" id="email-password-btn">Register</button>
     <button onclick="googleSignIn()" id="google-signin">Sign in with Google</button>
-    <div id="auth-toggle">
-      <span id="toggle-text">Already have an account?</span>
-      <a onclick="toggleAuth()">Sign In</a>
-    </div>
     <div id="auth-message"></div>
   </div>
 
@@ -303,65 +262,6 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    let isRegister = true;
-
-    function authAction() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const messageEl = document.getElementById('auth-message');
-
-      messageEl.style.color = '#f44336';
-      messageEl.textContent = '';
-
-      if (!email || !password) {
-        messageEl.textContent = translations[currentLang].pleaseEnterEmailPassword;
-        return;
-      }
-
-      if (isRegister) {
-        auth.createUserWithEmailAndPassword(email, password)
-          .then(() => {
-            messageEl.style.color = 'lime';
-            messageEl.textContent = translations[currentLang].registrationSuccess;
-          })
-          .catch(e => {
-            messageEl.textContent = e.message;
-          });
-      } else {
-        auth.signInWithEmailAndPassword(email, password)
-          .then(() => {
-            messageEl.style.color = 'lime';
-            messageEl.textContent = translations[currentLang].signedInSuccess;
-            showMainContent();
-          })
-          .catch(e => {
-            messageEl.textContent = e.message;
-          });
-      }
-    }
-
-    function toggleAuth() {
-      isRegister = !isRegister;
-      updateAuthTexts();
-      document.getElementById('auth-message').textContent = '';
-    }
-
-    function updateAuthTexts() {
-      const t = translations[currentLang];
-      document.getElementById('auth-title').innerText = isRegister ? t.register : t.signIn;
-      document.getElementById('email-password-btn').innerText = isRegister ? t.register : t.signIn;
-      document.getElementById('toggle-text').innerText = isRegister ? t.alreadyAccount : t.noAccount;
-      document.getElementById('auth-toggle').querySelector('a').innerText = isRegister ? t.signIn : t.register;
-      document.getElementById('google-signin').innerText = t.signInWithGoogle;
-      document.getElementById('email').placeholder = t.emailPlaceholder;
-      document.getElementById('password').placeholder = t.passwordPlaceholder;
-    }
-
-    function showMainContent() {
-      document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('main-content').classList.remove('hidden');
-    }
-
     function googleSignIn() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
@@ -382,6 +282,11 @@
         document.getElementById('main-content').classList.add('hidden');
         document.getElementById('auth-message').textContent = '';
       });
+    }
+
+    function showMainContent() {
+      document.getElementById('auth-box').style.display = 'none';
+      document.getElementById('main-content').classList.remove('hidden');
     }
 
     auth.onAuthStateChanged(user => {
@@ -431,17 +336,8 @@
         price: "Цена (по желанию)",
         give: "Что вы даёте?",
         want: "Что хотите взамен?",
-        register: "Регистрация",
-        signIn: "Войти",
-        alreadyAccount: "Уже есть аккаунт?",
-        noAccount: "Нет аккаунта?",
         signInWithGoogle: "Войти через Google",
         signOut: "Выйти",
-        emailPlaceholder: "Электронная почта",
-        passwordPlaceholder: "Пароль",
-        pleaseEnterEmailPassword: "Пожалуйста, введите email и пароль.",
-        registrationSuccess: "Регистрация успешна! Теперь вы можете войти.",
-        signedInSuccess: "Вход выполнен успешно!",
       },
       uk: {
         welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
@@ -457,17 +353,8 @@
         price: "Ціна (за бажанням)",
         give: "Що ви віддаєте?",
         want: "Що хочете натомість?",
-        register: "Реєстрація",
-        signIn: "Увійти",
-        alreadyAccount: "Вже маєте акаунт?",
-        noAccount: "Нема акаунта?",
         signInWithGoogle: "Увійти через Google",
         signOut: "Вийти",
-        emailPlaceholder: "Електронна пошта",
-        passwordPlaceholder: "Пароль",
-        pleaseEnterEmailPassword: "Будь ласка, введіть email і пароль.",
-        registrationSuccess: "Реєстрація успішна! Тепер можете увійти.",
-        signedInSuccess: "Увійшли успішно!",
       },
       en: {
         welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
@@ -483,17 +370,8 @@
         price: "Price (optional)",
         give: "What are you giving?",
         want: "What do you want in return?",
-        register: "Register",
-        signIn: "Sign In",
-        alreadyAccount: "Already have an account?",
-        noAccount: "Don't have an account?",
         signInWithGoogle: "Sign in with Google",
         signOut: "Sign Out",
-        emailPlaceholder: "Email",
-        passwordPlaceholder: "Password",
-        pleaseEnterEmailPassword: "Please enter email and password.",
-        registrationSuccess: "Registration successful! You can now sign in.",
-        signedInSuccess: "Signed in successfully!",
       },
     };
 
@@ -511,4 +389,22 @@
       document.getElementById("title-trade").innerText = t.trade;
 
       document.getElementById("submit-buy").innerText = t.submit;
-      document.getElementById
+      document.getElementById("submit-sell").innerText = t.submit;
+      document.getElementById("submit-trade").innerText = t.submit;
+
+      document.querySelectorAll("input").forEach((input) => {
+        const key = input.dataset.placeholder;
+        if (t[key]) {
+          input.placeholder = t[key];
+        }
+      });
+
+      document.getElementById("google-signin").innerText = t.signInWithGoogle;
+      document.getElementById("signout-btn").innerText = t.signOut;
+    }
+
+    // Initialize language on load
+    switchLang(currentLang);
+  </script>
+</body>
+</html>
