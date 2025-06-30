@@ -14,10 +14,15 @@
       color: white;
       text-align: center;
     }
+    header {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      font-size: 24px;
+    }
     section {
       background-color: rgba(0, 0, 0, 0.8);
       padding: 30px;
-      margin: 50px auto;
+      margin: 30px auto;
       max-width: 600px;
       border-radius: 15px;
     }
@@ -62,6 +67,8 @@
   </style>
 </head>
 <body>
+  <header>🌱 Добро пожаловать на сайт Grow a Garden! 🌻<br><small>Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.</small></header>
+
   <div class="lang-switch">
     <label for="lang-select">🌐</label>
     <select id="lang-select" onchange="switchLang(this.value)">
