@@ -82,7 +82,7 @@
     <select id="lang-select">
       <option value="ru">🇷🇺 Русский</option>
       <option value="uk">🇺🇦 Українська</option>
-      <option value="en">🇬🇧 English</option>
+      <option value="en">en English</option>
     </select>
   </div>
 
@@ -96,7 +96,7 @@
     <form id="form-buy">
       <input type="text" placeholder="Что вы хотите купить?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
-      <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <input type="text" placeholder="Контакт (пожалуйста пишите в начале DS, TG и т. п.)" />
       <button type="submit" id="btn-buy">Отправить</button>
     </form>
     <div class="entry" id="entries-buy"></div>
@@ -108,7 +108,7 @@
       <input type="text" placeholder="Что вы продаёте?" required />
       <input type="text" placeholder="Цена (необязательно)" />
       <input type="text" placeholder="Ваш ник в Roblox" required />
-      <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <input type="text" placeholder="Контакт (пожалуйста пишите в начале DS, TG и т. п.)" />
       <button type="submit" id="btn-sell">Отправить</button>
     </form>
     <div class="entry" id="entries-sell"></div>
@@ -120,7 +120,7 @@
       <input type="text" placeholder="Что вы отдаёте?" required />
       <input type="text" placeholder="Что хотите взамен?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
-      <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <input type="text" placeholder="Контакт (пожалуйста пишите в начале DS, TG и т. п.)" />
       <button type="submit" id="btn-trade">Отправить</button>
     </form>
     <div class="entry" id="entries-trade"></div>
@@ -139,9 +139,9 @@
         sellTitle: "📤 Продать",
         tradeTitle: "🔁 Обмен",
         placeholders: {
-          buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-          sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-          trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
+          buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (пожалуйста пишите в начале DS, TG и т. п.)"],
+          sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (пожалуйста пишите в начале DS, TG и т. п.)"],
+          trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (пожалуйста пишите в начале DS, TG и т. п.)"],
         },
         sendBtn: "Отправить"
       },
@@ -152,9 +152,9 @@
         sellTitle: "📤 Продати",
         tradeTitle: "🔁 Обмін",
         placeholders: {
-          buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-          sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-          trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
+          buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Будь ласка, напишіть на початку DS, TG тощо)"],
+          sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Будь ласка, напишіть на початку DS, TG тощо)"],
+          trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Будь ласка, напишіть на початку DS, TG тощо)"],
         },
         sendBtn: "Відправити"
       },
@@ -165,9 +165,9 @@
         sellTitle: "📤 Sell",
         tradeTitle: "🔁 Trade",
         placeholders: {
-          buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Discord etc.)"],
-          sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Discord etc.)"],
-          trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Discord etc.)"],
+          buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Please write at the beginning of DS, TG etc.)"],
+          sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Please write at the beginning of DS, TG etc.)"],
+          trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Please write at the beginning of DS, TG etc.)"],
         },
         sendBtn: "Send"
       }
