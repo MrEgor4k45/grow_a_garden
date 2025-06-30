@@ -240,7 +240,7 @@
   <script>
     const translations = {
       ru: {
-        welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
+        welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden shop! 🌻",
         welcomeDesc: "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
         buyTitle: "📥 Купить",
         sellTitle: "📤 Продать",
@@ -254,7 +254,7 @@
         noRequests: "Заявок пока нет."
       },
       uk: {
-        welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
+        welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden shop! 🌻",
         welcomeDesc: "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
         buyTitle: "📥 Купити",
         sellTitle: "📤 Продати",
@@ -268,7 +268,7 @@
         noRequests: "Заявок поки немає."
       },
       en: {
-        welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
+        welcomeTitle: "🌱 Welcome to the Grow a Garden shop website! 🌻",
         welcomeDesc: "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
         buyTitle: "📥 Buy",
         sellTitle: "📤 Sell",
