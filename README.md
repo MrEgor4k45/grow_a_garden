@@ -6,7 +6,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-image: url('https://files.bo3.gg/uploads/image/82204/image/webp-94d4d63b82d3ee25e1de3f08ff3f9e93.webp'); /* Фон из Roblox */
+      background-image: url('https://insider-gaming.com/wp-content/uploads/2025/05/grow-a-garden-update.png'); /* Фон из Roblox */
       background-size: cover;
       font-family: Arial, sans-serif;
       color: white;
@@ -61,7 +61,7 @@
 
   <div class="container">
     <div class="card">
-      <img src="https://insider-gaming.com/wp-content/uploads/2025/05/grow-a-garden-update.png">
+      <img src="https://files.bo3.gg/uploads/image/82204/image/webp-94d4d63b82d3ee25e1de3f08ff3f9e93.webp">
       <h3>Петомцы</h3>
       <button>Купить</button>
       <button>Продать</button>
