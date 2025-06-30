@@ -63,19 +63,12 @@
   <div class="container">
     <div class="card">
       <img src="https://i.imgur.com/O3pZ7vZ.png" alt="Moon Melon">
-      <h3>Moon Melon</h3>
+      <h3>Петомцы</h3>
       <button>Купить</button>
       <button>Продать</button>
       <button>Обмен</button>
     </div>
 
-    <div class="card">
-      <img src="https://i.imgur.com/VFb9kU0.png" alt="Watering Can">
-      <h3>Поливалка</h3>
-      <button>Купить</button>
-      <button>Продать</button>
-      <button>Обмен</button>
-    </div>
 
     <!-- Можешь добавить свои товары -->
   </div>
