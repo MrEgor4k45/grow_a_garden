@@ -5,16 +5,16 @@
   <title>Магазин Grow a Garden</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
+    import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "СЮДА_ВСТАВЬ_СВОЙ_API_KEY",
-      authDomain: "your-app-id.firebaseapp.com",
-      databaseURL: "https://your-app-id.firebaseio.com",
-      projectId: "your-app-id",
-      storageBucket: "your-app-id.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abc123"
+      apiKey: "ТВОЙ_API_KEY",
+      authDomain: "ТВОЙ_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://ТВОЙ_PROJECT_ID.firebaseio.com",
+      projectId: "ТВОЙ_PROJECT_ID",
+      storageBucket: "ТВОЙ_PROJECT_ID.appspot.com",
+      messagingSenderId: "ТВОЙ_SENDER_ID",
+      appId: "ТВОЙ_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -30,20 +30,24 @@
         input.value = "";
       });
 
-      // Firebase запись
       push(ref(db, type), data);
-
-      // Показ на сайте
-      const preview = Object.entries(data)
-        .map(([k, v]) => `<strong>${k}</strong>: ${v}`)
-        .join("<br>");
-      const div = document.createElement("div");
-      div.className = "entry";
-      div.innerHTML = preview;
-      document.getElementById(`${type}-entries`).prepend(div);
     };
-  </script>
 
+    // Показывать заявки в реальном времени
+    ["buy", "sell", "trade"].forEach(type => {
+      const container = document.getElementById(`${type}-entries`);
+      onChildAdded(ref(db, type), snapshot => {
+        const data = snapshot.val();
+        const html = Object.entries(data)
+          .map(([k, v]) => `<strong>${k}</strong>: ${v}`)
+          .join("<br>");
+        const div = document.createElement("div");
+        div.className = "entry";
+        div.innerHTML = html;
+        container.prepend(div);
+      });
+    });
+  </script>
   <style>
     html { scroll-behavior: smooth; }
     body {
