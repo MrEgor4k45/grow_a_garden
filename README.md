@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Купить | Grow a Garden</title>
+  <title>Заявки | Grow a Garden</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/Roblox_Logo_2022.svg">
   <style>
     body {
@@ -61,31 +61,53 @@
 
   <section>
     <h2 id="title">📥 Купить</h2>
-    <form onsubmit="sendForm(event)">
+    <form onsubmit="sendForm(event, 'buy')">
       <input type="text" placeholder="Что хотите купить?" required>
       <input type="text" placeholder="Ваш Roblox ник" required>
       <input type="text" placeholder="Контакт (Discord и т.п.)">
       <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries"></div>
+    <div class="entry" id="entries-buy"></div>
+  </section>
+
+  <section>
+    <h2 id="title-sell">📤 Продать</h2>
+    <form onsubmit="sendForm(event, 'sell')">
+      <input type="text" placeholder="Что хотите продать?" required>
+      <input type="text" placeholder="Цена (по желанию)">
+      <input type="text" placeholder="Ваш Roblox ник" required>
+      <input type="text" placeholder="Контакт (Discord и т.п.)">
+      <button type="submit">Отправить</button>
+    </form>
+    <div class="entry" id="entries-sell"></div>
+  </section>
+
+  <section>
+    <h2 id="title-trade">🔁 Обмен</h2>
+    <form onsubmit="sendForm(event, 'trade')">
+      <input type="text" placeholder="Что вы даёте?" required>
+      <input type="text" placeholder="Что хотите взамен?" required>
+      <input type="text" placeholder="Ваш Roblox ник" required>
+      <input type="text" placeholder="Контакт (Discord и т.п.)">
+      <button type="submit">Отправить</button>
+    </form>
+    <div class="entry" id="entries-trade"></div>
   </section>
 
   <script>
     const webhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
 
-    function sendForm(e) {
+    function sendForm(e, type) {
       e.preventDefault();
       const inputs = e.target.querySelectorAll('input');
-      let message = "";
+      let message = `Заявка: ${type.toUpperCase()}\n`;
 
       inputs.forEach(input => {
         message += `**${input.placeholder}**: ${input.value}\n`;
       });
 
-      // Показать на сайте
-      document.getElementById("entries").innerHTML = message.replaceAll("\n", "<br>");
+      document.getElementById(`entries-${type}`).innerHTML = message.replaceAll("\n", "<br>");
 
-      // Отправить в Discord
       fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,11 +119,13 @@
 
     function switchLang(lang) {
       const titles = {
-        ru: "\uD83D\uDCE5 Купить",
-        uk: "\uD83D\uDCE5 Купити",
-        en: "\uD83D\uDCE5 Buy"
+        ru: ["\uD83D\uDCE5 Купить", "\uD83D\uDCE4 Продать", "\uD83D\uDD01 Обмен"],
+        uk: ["\uD83D\uDCE5 Купити", "\uD83D\uDCE4 Продати", "\uD83D\uDD01 Обмiн"],
+        en: ["\uD83D\uDCE5 Buy", "\uD83D\uDCE4 Sell", "\uD83D\uDD01 Trade"]
       };
-      document.getElementById("title").innerText = titles[lang];
+      document.getElementById("title").innerText = titles[lang][0];
+      document.getElementById("title-sell").innerText = titles[lang][1];
+      document.getElementById("title-trade").innerText = titles[lang][2];
     }
   </script>
 </body>
