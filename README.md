@@ -392,5 +392,13 @@
 
     updateTexts();
   </script>
+  <footer style="background: rgba(0,0,0,0.6); padding: 15px; text-align: center; margin-top: 30px;">
+  <p style="font-size: 14px; color: white;">
+    ❓ Появились проблемы? Пишите: 
+    <br>Discord: <b>na_testosterone5x30</b> 
+    <br>Telegram: <b>@grow_a_garden_shop</b>
+  </p>
+</footer>
+
 </body>
 </html>
