@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -10,9 +11,8 @@
       background-size: cover;
       color: white;
       text-align: center;
-      padding-top: 80px; /* для контактов сверху */
+      padding-top: 80px;
     }
-    /* Контакты сверху */
     #contacts {
       position: fixed;
       top: 0;
@@ -93,7 +93,6 @@
       background: black;
       color: white;
     }
-    /* Админ токен поле */
     #admin-token-box {
       position: fixed;
       top: 50px;
@@ -117,7 +116,6 @@
       padding: 5px 8px;
       font-weight: normal;
     }
-    /* Кнопка удаления */
     .delete-btn {
       position: absolute;
       top: 6px;
@@ -130,11 +128,11 @@
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
-      display: none; /* по умолчанию скрыта */
+      display: none;
       user-select: none;
     }
     .entry.admin .delete-btn {
-      display: block; /* показываем для админа */
+      display: block;
     }
   </style>
 
@@ -202,186 +200,161 @@
     <div class="entry-list" id="entries-trade"></div>
   </section>
 
-  <script>
-    const translations = {
-      ru: {
-        welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
-        welcomeDesc: "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
-        buyTitle: "📥 Купить",
-        sellTitle: "📤 Продать",
-        tradeTitle: "🔁 Обмен",
-        placeholders: {
-          buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-          sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-          trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-        },
-        sendBtn: "Отправить"
+<script>
+  const translations = {
+    ru: {
+      welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
+      welcomeDesc: "Здесь вы можете подать заявки на покупку, продажу и обмен предметов из игры Grow a Garden.",
+      buyTitle: "📥 Купить",
+      sellTitle: "📤 Продать",
+      tradeTitle: "🔁 Обмен",
+      placeholders: {
+        buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
+        sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
+        trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
       },
-      uk: {
-        welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
-        welcomeDesc: "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
-        buyTitle: "📥 Купити",
-        sellTitle: "📤 Продати",
-        tradeTitle: "🔁 Обмін",
-        placeholders: {
-          buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-          sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-          trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-        },
-        sendBtn: "Відправити"
+      sendBtn: "Отправить",
+      noEntries: "Заявок пока нет."
+    },
+    uk: {
+      welcomeTitle: "🌱 Ласкаво просимо на сайт Grow a Garden! 🌻",
+      welcomeDesc: "Тут ви можете подати заявки на купівлю, продаж і обмін предметів із гри Grow a Garden.",
+      buyTitle: "📥 Купити",
+      sellTitle: "📤 Продати",
+      tradeTitle: "🔁 Обмін",
+      placeholders: {
+        buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
+        sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
+        trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
       },
-      en: {
-        welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
-        welcomeDesc: "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
-        buyTitle: "📥 Buy",
-        sellTitle: "📤 Sell",
-        tradeTitle: "🔁 Trade",
-        placeholders: {
-          buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Discord etc.)"],
-          sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Discord etc.)"],
-          trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Discord etc.)"],
-        },
-        sendBtn: "Send"
-      }
-    };
-
-    let currentLang = "ru";
-    const ADMIN_TOKEN = "Admin-gag-shop";
-
-    function updateTexts() {
-      const t = translations[currentLang];
-
-      document.getElementById("welcome-title").innerText = t.welcomeTitle;
-      document.getElementById("welcome-desc").innerText = t.welcomeDesc;
-
-      document.getElementById("title-buy").innerText = t.buyTitle;
-      document.getElementById("title-sell").innerText = t.sellTitle;
-      document.getElementById("title-trade").innerText = t.tradeTitle;
-
-      // placeholders
-      const formBuyInputs = document.querySelectorAll("#form-buy input");
-      t.placeholders.buy.forEach((ph, i) => {
-        if(formBuyInputs[i]) formBuyInputs[i].placeholder = ph;
-      });
-
-      const formSellInputs = document.querySelectorAll("#form-sell input");
-      t.placeholders.sell.forEach((ph, i) => {
-        if(formSellInputs[i]) formSellInputs[i].placeholder = ph;
-      });
-
-      const formTradeInputs = document.querySelectorAll("#form-trade input");
-      t.placeholders.trade.forEach((ph, i) => {
-        if(formTradeInputs[i]) formTradeInputs[i].placeholder = ph;
-      });
-
-      // buttons
-      document.getElementById("btn-buy").innerText = t.sendBtn;
-      document.getElementById("btn-sell").innerText = t.sendBtn;
-      document.getElementById("btn-trade").innerText = t.sendBtn;
+      sendBtn: "Відправити",
+      noEntries: "Заявок поки немає."
+    },
+    en: {
+      welcomeTitle: "🌱 Welcome to the Grow a Garden website! 🌻",
+      welcomeDesc: "Here you can submit requests to buy, sell, and trade items from the Grow a Garden game.",
+      buyTitle: "📥 Buy",
+      sellTitle: "📤 Sell",
+      tradeTitle: "🔁 Trade",
+      placeholders: {
+        buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Discord etc.)"],
+        sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Discord etc.)"],
+        trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Discord etc.)"],
+      },
+      sendBtn: "Send",
+      noEntries: "No requests yet."
     }
+  };
 
-    document.getElementById("lang-select").addEventListener("change", e => {
-      currentLang = e.target.value;
-      updateTexts();
+  let currentLang = "ru";
+  const ADMIN_TOKEN = "Admin-gag-shop";
+  let currentAdminToken = "";
+
+  function updateTexts() {
+    const t = translations[currentLang];
+    document.getElementById("welcome-title").innerText = t.welcomeTitle;
+    document.getElementById("welcome-desc").innerText = t.welcomeDesc;
+    document.getElementById("title-buy").innerText = t.buyTitle;
+    document.getElementById("title-sell").innerText = t.sellTitle;
+    document.getElementById("title-trade").innerText = t.tradeTitle;
+
+    const formBuyInputs = document.querySelectorAll("#form-buy input");
+    t.placeholders.buy.forEach((ph, i) => {
+      if (formBuyInputs[i]) formBuyInputs[i].placeholder = ph;
+    });
+    const formSellInputs = document.querySelectorAll("#form-sell input");
+    t.placeholders.sell.forEach((ph, i) => {
+      if (formSellInputs[i]) formSellInputs[i].placeholder = ph;
+    });
+    const formTradeInputs = document.querySelectorAll("#form-trade input");
+    t.placeholders.trade.forEach((ph, i) => {
+      if (formTradeInputs[i]) formTradeInputs[i].placeholder = ph;
     });
 
-    // Firebase config и инициализация
+    document.getElementById("btn-buy").innerText = t.sendBtn;
+    document.getElementById("btn-sell").innerText = t.sendBtn;
+    document.getElementById("btn-trade").innerText = t.sendBtn;
+
+    // Обновить текст "Заявок пока нет" для пустых контейнеров
+    ["entries-buy", "entries-sell", "entries-trade"].forEach(id => {
+      const container = document.getElementById(id);
+      if (container && !container.hasChildNodes()) {
+        container.textContent = t.noEntries;
+      }
+    });
+  }
+
+  document.getElementById("lang-select").addEventListener("change", e => {
+    currentLang = e.target.value;
+    updateTexts();
+  });
+
+  // Firebase config и инициализация
   const firebaseConfig = {
-  apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
-  authDomain: "gag-4a6bd.firebaseapp.com",
-  databaseURL: "https://gag-4a6bd-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "gag-4a6bd",
-  storageBucket: "gag-4a6bd.firebasestorage.app",
-  messagingSenderId: "355235183308",
-  appId: "1:355235183308:web:643a24b93af27b1b502069",
-  measurementId: "G-05LDPVWNDM"
-};
+    apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
+    authDomain: "gag-4a6bd.firebaseapp.com",
+    databaseURL: "https://gag-4a6bd-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "gag-4a6bd",
+    storageBucket: "gag-4a6bd.firebasestorage.app",
+    messagingSenderId: "355235183308",
+    appId: "1:355235183308:web:643a24b93af27b1b502069",
+    measurementId: "G-05LDPVWNDM"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    const discordWebhook = "https://discord.com/api/webhooks/1389489483812175892/xVBCE4BDw5JzAtuOx3NmJ-gj7FpaYdFykNlcifVugL-Sax88lAN_mFcD6qI-DPCx81jG";
+  const discordWebhook = "https://discord.com/api/webhooks/1389489483812175892/xVBCE4BDw5JzAtuOx3NmJ-gj7FpaYdFykNlcifVugL-Sax88lAN_mFcD6qI-DPCx81jG";
 
-    function addEntry(type, data) {
-      const newRef = db.ref(type).push();
-      newRef.set(data);
+  function addEntry(type, data) {
+    const newRef = db.ref(type).push();
+    newRef.set(data);
 
-      let discordMessage = `📝 Заявка: ${type.toUpperCase()}\n`;
-      for (const key in data) {
-        discordMessage += `**${key}**: ${data[key]}\n`;
-      }
-
-      fetch(discordWebhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: discordMessage }),
-      });
+    let discordMessage = `📝 Заявка: ${type.toUpperCase()}\n`;
+    for (const key in data) {
+      discordMessage += `**${key}**: ${data[key]}\n`;
     }
 
-    // Сохраняем текущий токен из поля
-    let currentAdminToken = "";
-
-    document.getElementById("admin-token-input").addEventListener("input", e => {
-      currentAdminToken = e.target.value.trim();
-      refreshEntriesDisplay();
+    fetch(discordWebhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: discordMessage }),
     });
+  }
 
-    function listenEntries(type, containerId) {
-      const container = document.getElementById(containerId);
-      const ref = db.ref(type);
-      ref.on('value', (snapshot) => {
-        const val = snapshot.val();
-        container.innerHTML = '';
-        if (val) {
-          // val - объект с ключами Firebase
-          Object.entries(val).forEach(([key, entry]) => {
-            let text = '';
-            for (const k in entry) {
-              text += `${k}: ${entry[k]}\n`;
-            }
+  document.getElementById("admin-token-input").addEventListener("input", e => {
+    currentAdminToken = e.target.value.trim();
+    refreshEntriesDisplay();
+  });
 
-            const div = document.createElement('div');
-            div.classList.add('entry');
-            div.textContent = text;
+  function listenEntries(type, containerId) {
+    const container = document.getElementById(containerId);
+    const ref = db.ref(type);
+    ref.on("value", snapshot => {
+      const val = snapshot.val();
+      container.innerHTML = "";
+      if (val) {
+        Object.entries(val).forEach(([key, entry]) => {
+          let text = "";
+          for (const k in entry) {
+            text += `${k}: ${entry[k]}\n`;
+          }
 
-            // Добавляем кнопку удаления, если токен правильный
-            if(currentAdminToken === ADMIN_TOKEN) {
-              div.classList.add('admin');
-              const delBtn = document.createElement('button');
-              delBtn.textContent = 'Удалить';
-              delBtn.className = 'delete-btn';
-              delBtn.onclick = () => {
-                if(confirm('Удалить эту заявку?')) {
-                  db.ref(type + '/' + key).remove();
-                }
-              };
-              div.appendChild(delBtn);
-            }
+          const div = document.createElement("div");
+          div.classList.add("entry");
+          div.textContent = text;
 
-            container.appendChild(div);
-          });
-        } else {
-          container.textContent = {
-            ru: 'Заявок пока нет.',
-            uk: 'Заявок поки немає.',
-            en: 'No requests yet.'
-          }[currentLang];
-        }
-      });
-    }
-
-    function refreshEntriesDisplay() {
-      // Перезапускаем подписки, чтобы обновить кнопки удаления
-      listenEntries('buy', 'entries-buy');
-      listenEntries('sell', 'entries-sell');
-      listenEntries('trade', 'entries-trade');
-    }
-
-    // Обработчики форм
-    document.getElementById('form-buy').addEventListener('submit', e => {
-      e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      const data = {
-        item: inputs[0].value.trim(),
-        nick: inputs[1].value.trim(),
-        contact: inputs[2].value.trim()
+          if (currentAdminToken === ADMIN_TOKEN) {
+            div.classList.add("admin");
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "Удалить";
+            delBtn.className = "delete-btn";
+            delBtn.onclick = () => {
+              if (confirm("Удалить эту заявку?")) {
+                db.ref(type + "/" + key).remove();
+              }
+            };
+            div.appendChild(delBtn);
+          }
+          container.appendChild(div);
+        });
