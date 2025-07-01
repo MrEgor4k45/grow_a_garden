@@ -277,7 +277,7 @@
     const db = firebase.database();
 
     // Discord Webhook URL
-    const discordWebhook = "https://discord.com/api/webhooks/1389234189504745675/kUOWAgPGTDDVmsuRdFMpp28aX8t8-ow7HNcumMAsYnMuJYOQFyEEtBRGag0iIZDXndDB";
+    const discordWebhook = "https://discord.com/api/webhooks/1389489483812175892/xVBCE4BDw5JzAtuOx3NmJ-gj7FpaYdFykNlcifVugL-Sax88lAN_mFcD6qI-DPCx81jG";
 
     // --- Авторизация ---
     const userInfo = document.getElementById("user-info");
