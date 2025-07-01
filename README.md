@@ -2,6 +2,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Grow a Garden | Заявки</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body {
       margin: 0;
@@ -149,6 +150,7 @@
       <input type="text" placeholder="Что вы хотите купить?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-buy">Отправить</button>
     </form>
     <div id="entries-buy"></div>
@@ -161,6 +163,7 @@
       <input type="text" placeholder="Цена (необязательно)" />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-sell">Отправить</button>
     </form>
     <div id="entries-sell"></div>
@@ -173,6 +176,7 @@
       <input type="text" placeholder="Что хотите взамен?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-trade">Отправить</button>
     </form>
     <div id="entries-trade"></div>
@@ -399,6 +403,29 @@
     <br>Telegram: <b>@grow_a_garden_shop</b>
   </p>
 </footer>
-
+<script>
+    function isCaptchaChecked(form) {
+      const widget = form.querySelector('.g-recaptcha');
+      const response = grecaptcha.getResponse(widget.getAttribute('data-widget-id'));
+      return response.length > 0;
+    }
+    function setupRecaptcha(form) {
+      const widget = form.querySelector('.g-recaptcha');
+      const widgetId = grecaptcha.render(widget, {
+        sitekey: widget.getAttribute('data-sitekey')
+      });
+      widget.setAttribute('data-widget-id', widgetId);
+    }
+    window.onload = function () {
+      document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+          if (!isCaptchaChecked(form)) {
+            e.preventDefault();
+            alert('Пожалуйста, подтвердите капчу.');
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>
