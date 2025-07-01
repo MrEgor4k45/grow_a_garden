@@ -412,8 +412,5 @@
       if (select) {
         updateFooter(select.value);
         select.addEventListener('change', e => updateFooter(e.target.value));
-      }
-    });
-  </script>
 </body>
 </html>
