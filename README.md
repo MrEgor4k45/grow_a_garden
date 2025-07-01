@@ -1,4 +1,5 @@
 <script>
+window.onload = () => {
   const translations = {
     ru: {
       welcomeTitle: "🌱 Добро пожаловать на сайт Grow a Garden! 🌻",
@@ -97,6 +98,7 @@
   const db = firebase.database();
 
   const discordWebhook = "https://discord.com/api/webhooks/1389489483812175892/xVBCE4BDw5JzAtuOx3NmJ-gj7FpaYdFykNlcifVugL-Sax88lAN_mFcD6qI-DPCx81jG";
+
   function addEntry(type, data) {
     const newRef = db.ref(type).push();
     newRef.set(data);
@@ -111,10 +113,11 @@
       body: JSON.stringify({ content: discordMessage }),
     });
   }
+
   function listenEntries(type, containerId) {
     const container = document.getElementById(containerId);
     const ref = db.ref(type);
-    ref.on('value', (snapshot) => 
+    ref.on('value', (snapshot) => {
       const val = snapshot.val();
       container.innerHTML = '';
       if (val) {
@@ -126,7 +129,6 @@
           const div = document.createElement('div');
           div.classList.add('entry');
           div.textContent = text;
-          // Добавляем кнопку удаления, если токен верный
           if(currentAdminToken === ADMIN_TOKEN) {
             div.classList.add('admin');
             const delBtn = document.createElement('button');
@@ -150,11 +152,13 @@
       }
     });
   }
+
   const translationsCaptchaAlert = {
     ru: 'Пожалуйста, подтвердите капчу.',
     uk: 'Будь ласка, підтвердіть капчу.',
     en: 'Please complete the captcha.'
   };
+
   function getRecaptchaResponse(form) {
     const widget = form.querySelector('.g-recaptcha');
     if (!widget) return null;
@@ -162,7 +166,7 @@
     const index = Array.from(widgets).indexOf(widget);
     return grecaptcha.getResponse(index);
   }
-  // Обработчики форм с проверкой капчи
+
   ['buy', 'sell', 'trade'].forEach(type => {
     document.getElementById(`form-${type}`).addEventListener('submit', e => {
       e.preventDefault();
@@ -194,14 +198,17 @@
       grecaptcha.reset();
     });
   });
+
   document.getElementById("admin-token-input").addEventListener("input", e => {
     currentAdminToken = e.target.value.trim();
     listenEntries('buy', 'entries-buy');
     listenEntries('sell', 'entries-sell');
     listenEntries('trade', 'entries-trade');
   });
+
   listenEntries('buy', 'entries-buy');
   listenEntries('sell', 'entries-sell');
   listenEntries('trade', 'entries-trade');
   updateTexts();
+};
 </script>
