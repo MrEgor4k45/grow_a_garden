@@ -1,8 +1,8 @@
-<>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <title>Grow a Garden | Заявки</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body {
       margin: 0;
@@ -57,6 +57,26 @@
       white-space: pre-line;
       max-height: 200px;
       overflow-y: auto;
+      position: relative;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: #c33;
+      border: none;
+      padding: 3px 6px;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      display: none;
+      min-width: auto;
+      width: auto;
+    }
+    .entry.admin .delete-btn {
+      display: block;
     }
     .lang-switch {
       position: fixed;
@@ -75,6 +95,29 @@
       background: black;
       color: white;
     }
+    #admin-token-box {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.6);
+      padding: 6px 10px;
+      border-radius: 8px;
+      z-index: 1000;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #admin-token-input {
+      width: 150px;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid white;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-weight: normal;
+    }
   </style>
 
   <!-- Firebase SDK -->
@@ -83,11 +126,16 @@
 </head>
 <body>
 
+  <div id="admin-token-box">
+    <label for="admin-token-input">Админ токен:</label>
+    <input type="password" id="admin-token-input" placeholder="Введите токен" />
+  </div>
+
   <div class="lang-switch">
     <select id="lang-select">
       <option value="ru">🇷🇺 Русский</option>
       <option value="uk">🇺🇦 Українська</option>
-      <option value="en">🇬🇧 English</option>
+      <option value="en">en English</option>
     </select>
   </div>
 
@@ -102,9 +150,10 @@
       <input type="text" placeholder="Что вы хотите купить?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-buy">Отправить</button>
     </form>
-    <div class="entry" id="entries-buy"></div>
+    <div id="entries-buy"></div>
   </section>
 
   <section>
@@ -114,9 +163,10 @@
       <input type="text" placeholder="Цена (необязательно)" />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-sell">Отправить</button>
     </form>
-    <div class="entry" id="entries-sell"></div>
+    <div id="entries-sell"></div>
   </section>
 
   <section>
@@ -126,9 +176,10 @@
       <input type="text" placeholder="Что хотите взамен?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
+      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-trade">Отправить</button>
     </form>
-    <div class="entry" id="entries-trade"></div>
+    <div id="entries-trade"></div>
   </section>
 
   <script>
@@ -140,9 +191,9 @@
         sellTitle: "📤 Продать",
         tradeTitle: "🔁 Обмен",
         placeholders: {
-          buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-          sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
-          trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Discord и т.п.)"],
+          buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
+          sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
+          trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
         },
         sendBtn: "Отправить"
       },
@@ -153,9 +204,9 @@
         sellTitle: "📤 Продати",
         tradeTitle: "🔁 Обмін",
         placeholders: {
-          buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-          sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
-          trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Discord тощо)"],
+          buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
+          sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
+          trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
         },
         sendBtn: "Відправити"
       },
@@ -166,15 +217,17 @@
         sellTitle: "📤 Sell",
         tradeTitle: "🔁 Trade",
         placeholders: {
-          buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Discord etc.)"],
-          sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Discord etc.)"],
-          trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Discord etc.)"],
+          buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
+          sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
+          trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
         },
         sendBtn: "Send"
       }
     };
 
     let currentLang = "ru";
+    const ADMIN_TOKEN = "Admin-gag-shop";
+    let currentAdminToken = "";
 
     function updateTexts() {
       const t = translations[currentLang];
@@ -252,18 +305,30 @@
         const val = snapshot.val();
         container.innerHTML = '';
         if (val) {
-          Object.values(val).forEach(entry => {
+          Object.entries(val).forEach(([key, entry]) => {
             let text = '';
-            for (const key in entry) {
-              text += `${key}: ${entry[key]}\n`;
+            for (const k in entry) {
+              text += `${k}: ${entry[k]}\n`;
             }
+
             const div = document.createElement('div');
-            div.style.border = '1px solid #4caf50';
-            div.style.marginBottom = '10px';
-            div.style.padding = '8px';
-            div.style.borderRadius = '6px';
-            div.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+            div.classList.add('entry');
             div.textContent = text;
+
+            // Добавляем кнопку удаления, если токен верный
+            if(currentAdminToken === ADMIN_TOKEN) {
+              div.classList.add('admin');
+              const delBtn = document.createElement('button');
+              delBtn.textContent = 'Удалить';
+              delBtn.className = 'delete-btn';
+              delBtn.onclick = () => {
+                if(confirm('Удалить эту заявку?')) {
+                  db.ref(type + '/' + key).remove();
+                }
+              };
+              div.appendChild(delBtn);
+            }
+
             container.appendChild(div);
           });
         } else {
@@ -276,10 +341,30 @@
       });
     }
 
-    // Обработчики форм
+    const translationsCaptchaAlert = {
+      ru: 'Пожалуйста, подтвердите капчу.',
+      uk: 'Будь ласка, підтвердіть капчу.',
+      en: 'Please complete the captcha.'
+    };
+
+    function getRecaptchaResponse(form) {
+      const widget = form.querySelector('.g-recaptcha');
+      if (!widget) return null;
+      const widgets = document.querySelectorAll('.g-recaptcha');
+      const index = Array.from(widgets).indexOf(widget);
+      return grecaptcha.getResponse(index);
+    }
+
+    // Обработчики форм с проверкой капчи
     document.getElementById('form-buy').addEventListener('submit', e => {
       e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
+      const form = e.target;
+      const response = getRecaptchaResponse(form);
+      if (!response || response.length === 0) {
+        alert(translationsCaptchaAlert[currentLang] || 'Please complete the captcha.');
+        return;
+      }
+      const inputs = form.querySelectorAll('input');
       const data = {
         item: inputs[0].value.trim(),
         nick: inputs[1].value.trim(),
@@ -287,12 +372,19 @@
         time: new Date().toLocaleString()
       };
       addEntry('buy', data);
-      e.target.reset();
+      form.reset();
+      grecaptcha.reset();
     });
 
     document.getElementById('form-sell').addEventListener('submit', e => {
       e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
+      const form = e.target;
+      const response = getRecaptchaResponse(form);
+      if (!response || response.length === 0) {
+        alert(translationsCaptchaAlert[currentLang] || 'Please complete the captcha.');
+        return;
+      }
+      const inputs = form.querySelectorAll('input');
       const data = {
         item: inputs[0].value.trim(),
         price: inputs[1].value.trim() || '-',
@@ -301,29 +393,11 @@
         time: new Date().toLocaleString()
       };
       addEntry('sell', data);
-      e.target.reset();
+      form.reset();
+      grecaptcha.reset();
     });
 
     document.getElementById('form-trade').addEventListener('submit', e => {
       e.preventDefault();
-      const inputs = e.target.querySelectorAll('input');
-      const data = {
-        give: inputs[0].value.trim(),
-        want: inputs[1].value.trim(),
-        nick: inputs[2].value.trim(),
-        contact: inputs[3].value.trim() || '-',
-        time: new Date().toLocaleString()
-      };
-      addEntry('trade', data);
-      e.target.reset();
-    });
-
-    listenEntries('buy', 'entries-buy');
-    listenEntries('sell', 'entries-sell');
-    listenEntries('trade', 'entries-trade');
-
-    // Устанавливаем изначальный язык и тексты
-    updateTexts();
-  </script>
-</body>
-</html>
+      const form = e.target;
+      const response = getRecaptcha
