@@ -49,15 +49,11 @@
       font-weight: bold;
       transition: transform 0.2s ease;
     }
-    button:disabled {
-      background-color: #777;
-      cursor: not-allowed;
-    }
-    button:hover:not(:disabled) {
+    button:hover {
       background-color: #3e8e41;
       transform: scale(1.05);
     }
-    button:active:not(:disabled) {
+    button:active {
       transform: scale(1.1);
     }
     .entry {
@@ -69,6 +65,21 @@
       white-space: pre-line;
       max-height: 200px;
       overflow-y: auto;
+      position: relative;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #f44336;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 3px 7px;
+      font-size: 12px;
+      display: none;
     }
     .g-recaptcha {
       margin: 10px auto;
@@ -134,9 +145,9 @@
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (DS, TG и т.п.)" required />
       <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
-      <button type="submit" disabled>Отправить</button>
+      <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries-buy"></div>
+    <div class="entry-container" id="entries-buy"></div>
   </section>
 
   <section>
@@ -147,9 +158,9 @@
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (DS, TG и т.п.)" required />
       <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
-      <button type="submit" disabled>Отправить</button>
+      <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries-sell"></div>
+    <div class="entry-container" id="entries-sell"></div>
   </section>
 
   <section>
@@ -160,9 +171,9 @@
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (DS, TG и т.п.)" required />
       <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
-      <button type="submit" disabled>Отправить</button>
+      <button type="submit">Отправить</button>
     </form>
-    <div class="entry" id="entries-trade"></div>
+    <div class="entry-container" id="entries-trade"></div>
   </section>
 
   <!-- Firebase -->
@@ -193,16 +204,68 @@
       });
     }
 
+    function createEntryElement(key, data, isAdmin, containerId) {
+      const div = document.createElement('div');
+      div.className = 'entry';
+      div.dataset.key = key;
+      div.innerHTML = Object.entries(data).map(([k,v]) => `${k}: ${v}`).join("<br>");
+
+      if (isAdmin) {
+        const delBtn = document.createElement('button');
+        delBtn.textContent = "Удалить";
+        delBtn.className = "delete-btn";
+        delBtn.style.display = "block";
+        delBtn.addEventListener('click', () => {
+          if(confirm("Вы точно хотите удалить эту заявку?")) {
+            db.ref(`${containerId}/${key}`).remove();
+          }
+        });
+        div.appendChild(delBtn);
+      }
+      return div;
+    }
+
+    function listenEntries(dbPath, containerId) {
+      const container = document.getElementById(containerId);
+      let adminMode = false;
+
+      function renderEntries(entries, isAdmin) {
+        container.innerHTML = '';
+        if (!entries) {
+          container.textContent = 'Заявок пока нет.';
+          return;
+        }
+        Object.entries(entries).forEach(([key, data]) => {
+          const entryEl = createEntryElement(key, data, isAdmin, dbPath);
+          container.appendChild(entryEl);
+        });
+      }
+
+      // Первичная загрузка и обновления
+      db.ref(dbPath).on('value', snapshot => {
+        const val = snapshot.val();
+        renderEntries(val, adminMode);
+      });
+
+      // Возвращаем функцию для обновления adminMode и перерисовки
+      return function setAdminMode(isAdmin) {
+        adminMode = isAdmin;
+        db.ref(dbPath).once('value').then(snapshot => {
+          renderEntries(snapshot.val(), adminMode);
+        });
+      }
+    }
+
+    // Инициализация прослушивания всех трех разделов
+    const setAdminBuy = listenEntries('buy', 'entries-buy');
+    const setAdminSell = listenEntries('sell', 'entries-sell');
+    const setAdminTrade = listenEntries('trade', 'entries-trade');
+
     function setupForm(formId, dbPath, entryId) {
       const form = document.getElementById(formId);
-      const submitBtn = form.querySelector('button[type="submit"]');
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (submitBtn.disabled) {
-          alert("Вы не авторизованы как админ.");
-          return;
-        }
 
         const token = grecaptcha.getResponse();
         if (!token) {
@@ -221,11 +284,6 @@
         await db.ref(dbPath).push(data);
         sendToDiscord(dbPath, data);
 
-        const entryDiv = document.createElement('div');
-        entryDiv.className = 'entry';
-        entryDiv.innerHTML = Object.entries(data).map(([k,v]) => `${k}: ${v}`).join("<br>");
-        document.getElementById(entryId).appendChild(entryDiv);
-
         e.target.reset();
         grecaptcha.reset();
       });
@@ -242,22 +300,29 @@
     const tokenInput = document.getElementById("admin-token-input");
     const tokenBtn = document.getElementById("admin-token-btn");
     const tokenMsg = document.getElementById("admin-token-msg");
-    const submitButtons = document.querySelectorAll("form button[type='submit']");
 
     tokenBtn.addEventListener("click", () => {
       if (tokenInput.value === adminToken) {
         isAdmin = true;
         tokenMsg.style.color = "#4caf50";
-        tokenMsg.textContent = "Добро пожаловать, админ!";
+        tokenMsg.textContent = "Вы вошли как админ. Теперь можно удалять заявки.";
         tokenInput.value = "";
-        submitButtons.forEach(btn => btn.disabled = false);
+
+        // Обновляем отображение кнопок удаления везде
+        setAdminBuy(true);
+        setAdminSell(true);
+        setAdminTrade(true);
       } else {
         isAdmin = false;
         tokenMsg.style.color = "#f44336";
         tokenMsg.textContent = "Неверный токен!";
-        submitButtons.forEach(btn => btn.disabled = true);
+        // Скрываем кнопки удаления
+        setAdminBuy(false);
+        setAdminSell(false);
+        setAdminTrade(false);
       }
     });
   </script>
 </body>
 </html>
+
