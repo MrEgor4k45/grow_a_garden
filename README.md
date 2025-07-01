@@ -61,14 +61,16 @@
     .delete-btn {
       position: absolute;
       top: 5px;
-      right: 10px;
+      right: 5px;
       background: #c33;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      padding: 3px 6px;
+      border-radius: 4px;
       cursor: pointer;
       color: white;
       font-weight: bold;
+      font-size: 12px;
+      line-height: 1;
       display: none;
     }
     .entry.admin .delete-btn {
