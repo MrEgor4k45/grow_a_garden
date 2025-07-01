@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -75,6 +76,10 @@
       color: white;
     }
   </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -125,10 +130,6 @@
     </form>
     <div class="entry" id="entries-trade"></div>
   </section>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
   <script>
     const translations = {
@@ -212,13 +213,13 @@
       updateTexts();
     });
 
-    // Инициализация Firebase
+    // Firebase config и инициализация
     const firebaseConfig = {
       apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
       authDomain: "gag-4a6bd.firebaseapp.com",
       databaseURL: "https://gag-4a6bd-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "gag-4a6bd",
-      storageBucket: "gag-4a6bd.firebasestorage.app",
+      storageBucket: "gag-4a6bd.appspot.com",
       messagingSenderId: "355235183308",
       appId: "1:355235183308:web:a9b50b7e31e2a276502069"
     };
@@ -322,7 +323,7 @@
     listenEntries('trade', 'entries-trade');
 
     // Устанавливаем изначальный язык и тексты
-    updateTexts(ru);
+    updateTexts();
   </script>
 </body>
 </html>
