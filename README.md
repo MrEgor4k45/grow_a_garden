@@ -2,7 +2,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Grow a Garden | Заявки</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body {
       margin: 0;
@@ -150,7 +149,6 @@
       <input type="text" placeholder="Что вы хотите купить?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
-      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-buy">Отправить</button>
     </form>
     <div id="entries-buy"></div>
@@ -163,7 +161,6 @@
       <input type="text" placeholder="Цена (необязательно)" />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
-      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-sell">Отправить</button>
     </form>
     <div id="entries-sell"></div>
@@ -176,7 +173,6 @@
       <input type="text" placeholder="Что хотите взамен?" required />
       <input type="text" placeholder="Ваш ник в Roblox" required />
       <input type="text" placeholder="Контакт (Discord и т.п.)" />
-      <div class="g-recaptcha" data-sitekey="6Lfgp3MrAAAAAGiQK_wglmeukAE6HUW3iJGM1TRZ"></div>
       <button type="submit" id="btn-trade">Отправить</button>
     </form>
     <div id="entries-trade"></div>
@@ -194,6 +190,7 @@
           buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
           sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
           trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
+          footer: "Если у вас возникли вопросы или проблемы — напишите в поддержку:"
         },
         sendBtn: "Отправить"
       },
@@ -207,6 +204,7 @@
           buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
           sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
           trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
+          footer: "Якщо у вас виникли питання або проблеми — звертайтесь до підтримки:"
         },
         sendBtn: "Відправити"
       },
@@ -220,11 +218,19 @@
           buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
           sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
           trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
+          footer: "If you have any questions or issues — contact support:"
         },
         sendBtn: "Send"
       }
     };
-
+ // Функция обновления перевода футера
+    function updateFooter(lang = 'ru') {
+      const t = translations[lang] || translations['ru'];
+      const footer = document.getElementById('support-footer');
+      if (footer) {
+        footer.innerHTML = `${t.footer}<br />Telegram: <a href="https://t.me/grow_a_garden_shop" target="_blank" style="color: #6cf;">@grow_a_garden_shop</a><br />Discord: <span style="color: #ccc;">na_testosterone5x30</span>`;
+      }
+    }
     let currentLang = "ru";
     const ADMIN_TOKEN = "Admin-gag-shop";
     let currentAdminToken = "";
@@ -341,29 +347,19 @@
       });
     }
 
-    const translationsCaptchaAlert = {
-      ru: 'Пожалуйста, подтвердите капчу.',
-      uk: 'Будь ласка, підтвердіть капчу.',
-      en: 'Please complete the captcha.'
-    };
+    // Слушаем ввод админ токена
+    document.getElementById('admin-token-input').addEventListener('input', (e) => {
+      currentAdminToken = e.target.value.trim();
+      // Перезапускаем слушатели, чтобы обновить кнопки удаления
+      listenEntries('buy', 'entries-buy');
+      listenEntries('sell', 'entries-sell');
+      listenEntries('trade', 'entries-trade');
+    });
 
-    function getRecaptchaResponse(form) {
-      const widget = form.querySelector('.g-recaptcha');
-      if (!widget) return null;
-      const widgets = document.querySelectorAll('.g-recaptcha');
-      const index = Array.from(widgets).indexOf(widget);
-      return grecaptcha.getResponse(index);
-    }
-
-    // Обработчики форм с проверкой капчи
+    // Обработчики форм без капчи
     document.getElementById('form-buy').addEventListener('submit', e => {
       e.preventDefault();
       const form = e.target;
-      const response = getRecaptchaResponse(form);
-      if (!response || response.length === 0) {
-        alert(translationsCaptchaAlert[currentLang] || 'Please complete the captcha.');
-        return;
-      }
       const inputs = form.querySelectorAll('input');
       const data = {
         item: inputs[0].value.trim(),
@@ -373,17 +369,11 @@
       };
       addEntry('buy', data);
       form.reset();
-      grecaptcha.reset();
     });
 
     document.getElementById('form-sell').addEventListener('submit', e => {
       e.preventDefault();
       const form = e.target;
-      const response = getRecaptchaResponse(form);
-      if (!response || response.length === 0) {
-        alert(translationsCaptchaAlert[currentLang] || 'Please complete the captcha.');
-        return;
-      }
       const inputs = form.querySelectorAll('input');
       const data = {
         item: inputs[0].value.trim(),
@@ -394,10 +384,36 @@
       };
       addEntry('sell', data);
       form.reset();
-      grecaptcha.reset();
     });
 
     document.getElementById('form-trade').addEventListener('submit', e => {
       e.preventDefault();
       const form = e.target;
-      const response = getRecaptcha
+      const inputs = form.querySelectorAll('input');
+      const data = {
+        give: inputs[0].value.trim(),
+        want: inputs[1].value.trim(),
+        nick: inputs[2].value.trim(),
+        contact: inputs[3].value.trim() || '-',
+        time: new Date().toLocaleString()
+      };
+      addEntry('trade', data);
+      form.reset();
+    });
+
+    // Запускаем прослушку заявок при загрузке
+    updateTexts();
+    listenEntries('buy', 'entries-buy');
+    listenEntries('sell', 'entries-sell');
+    listenEntries('trade', 'entries-trade');
+     // Пример вызова при загрузке и смене языка
+    window.addEventListener('DOMContentLoaded', () => {
+      const select = document.querySelector('#lang-select');
+      if (select) {
+        updateFooter(select.value);
+        select.addEventListener('change', e => updateFooter(e.target.value));
+      }
+    });
+  </script>
+</body>
+</html>
