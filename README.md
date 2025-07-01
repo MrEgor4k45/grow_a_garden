@@ -190,7 +190,6 @@
           buy: ["Что вы хотите купить?", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
           sell: ["Что вы продаёте?", "Цена (необязательно)", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
           trade: ["Что вы отдаёте?", "Что хотите взамен?", "Ваш ник в Roblox", "Контакт (Пример DS: Nick TG: Nick)"],
-          footer: "Если у вас возникли вопросы или проблемы — напишите в поддержку:"
         },
         sendBtn: "Отправить"
       },
@@ -204,7 +203,6 @@
           buy: ["Що ви хочете купити?", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
           sell: ["Що ви продаєте?", "Ціна (необов'язково)", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
           trade: ["Що ви віддаєте?", "Що хочете натомість?", "Ваш нік в Roblox", "Контакт (Приклад DS: Nick TG: Nick)"],
-          footer: "Якщо у вас виникли питання або проблеми — звертайтесь до підтримки:"
         },
         sendBtn: "Відправити"
       },
@@ -218,19 +216,11 @@
           buy: ["What do you want to buy?", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
           sell: ["What do you want to sell?", "Price (optional)", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
           trade: ["What are you giving?", "What do you want in return?", "Your Roblox nickname", "Contact (Example DS: Nick TG: Nick)"],
-          footer: "If you have any questions or issues — contact support:"
         },
         sendBtn: "Send"
       }
     };
- // Функция обновления перевода футера
-    function updateFooter(lang = 'ru') {
-      const t = translations[lang] || translations['ru'];
-      const footer = document.getElementById('support-footer');
-      if (footer) {
-        footer.innerHTML = `${t.footer}<br />Telegram: <a href="https://t.me/grow_a_garden_shop" target="_blank" style="color: #6cf;">@grow_a_garden_shop</a><br />Discord: <span style="color: #ccc;">na_testosterone5x30</span>`;
-      }
-    }
+
     let currentLang = "ru";
     const ADMIN_TOKEN = "Admin-gag-shop";
     let currentAdminToken = "";
@@ -406,11 +396,40 @@
     listenEntries('buy', 'entries-buy');
     listenEntries('sell', 'entries-sell');
     listenEntries('trade', 'entries-trade');
-     // Пример вызова при загрузке и смене языка
-    window.addEventListener('DOMContentLoaded', () => {
-      const select = document.querySelector('#lang-select');
-      if (select) {
-        updateFooter(select.value);
-        select.addEventListener('change', e => updateFooter(e.target.value));
+const CONTACT_INFO = {
+  ds: "na_testosterone5x30",
+  tg: "grow_a_garden_shop"
+};
+
+function updateContactInfo() {
+  const t = translations[currentLang];
+  
+  // Обновляем контактную информацию в формах
+  const formInputs = document.querySelectorAll('input[placeholder*="Контакт"]');
+  formInputs.forEach(input => {
+    input.value = `DS: ${CONTACT_INFO.ds} | TG: ${CONTACT_INFO.tg}`;
+  });
+  
+  // Добавляем контактную информацию в футер
+  const footer = document.createElement('div');
+  footer.className = 'overlay';
+  footer.innerHTML = `
+    <h3 id="contact-title">${t.contactTitle}</h3>
+    <p id="contact-info">Discord: ${CONTACT_INFO.ds}<br>Telegram: ${CONTACT_INFO.tg}</p>
+  `;
+  document.body.appendChild(footer);
+}
+
+// Добавляем переводы для контактной информации
+Object.keys(translations).forEach(lang => {
+  translations[lang].contactTitle = "Контакты";
+});
+
+// Обновляем контактную информацию при изменении языка
+document.getElementById("lang-select").addEventListener("change", updateContactInfo);
+
+// Инициализируем контактную информацию при загрузке
+updateContactInfo();
+  </script>
 </body>
 </html>
