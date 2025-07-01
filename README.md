@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -396,40 +397,35 @@
     listenEntries('buy', 'entries-buy');
     listenEntries('sell', 'entries-sell');
     listenEntries('trade', 'entries-trade');
-const CONTACT_INFO = {
-  ds: "na_testosterone5x30",
-  tg: "grow_a_garden_shop"
-};
 
-function updateContactInfo() {
-  const t = translations[currentLang];
-  
-  // Обновляем контактную информацию в формах
-  const formInputs = document.querySelectorAll('input[placeholder*="Контакт"]');
-  formInputs.forEach(input => {
-    input.value = `DS: ${CONTACT_INFO.ds} | TG: ${CONTACT_INFO.tg}`;
-  });
-  
-  // Добавляем контактную информацию в футер
-  const footer = document.createElement('div');
-  footer.className = 'overlay';
-  footer.innerHTML = `
-    <h3 id="contact-title">${t.contactTitle}</h3>
-    <p id="contact-info">Discord: ${CONTACT_INFO.ds}<br>Telegram: ${CONTACT_INFO.tg}</p>
-  `;
-  document.body.appendChild(footer);
-}
+    const CONTACT_INFO = {
+      ds: "na_testosterone5x30",
+      tg: "grow_a_garden_shop"
+    };
 
-// Добавляем переводы для контактной информации
-Object.keys(translations).forEach(lang => {
-  translations[lang].contactTitle = "Контакты";
-});
+    function updateContactInfo() {
+      const t = translations[currentLang];
+      
+      // Добавляем контактную информацию в футер
+      const footer = document.createElement('div');
+      footer.className = 'overlay';
+      footer.innerHTML = `
+        <h3 id="contact-title">${t.contactTitle}</h3>
+        <p id="contact-info">Discord: ${CONTACT_INFO.ds}<br>Telegram: ${CONTACT_INFO.tg}</p>
+      `;
+      document.body.appendChild(footer);
+    }
 
-// Обновляем контактную информацию при изменении языка
-document.getElementById("lang-select").addEventListener("change", updateContactInfo);
+    // Добавляем переводы для контактной информации
+    Object.keys(translations).forEach(lang => {
+      translations[lang].contactTitle = "Контакты";
+    });
 
-// Инициализируем контактную информацию при загрузке
-updateContactInfo();
+    // Обновляем контактную информацию при изменении языка
+    document.getElementById("lang-select").addEventListener("change", updateContactInfo);
+
+    // Инициализируем контактную информацию при загрузке
+    updateContactInfo();
   </script>
 </body>
 </html>
