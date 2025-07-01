@@ -286,15 +286,16 @@
     });
 
     // Firebase config и инициализация
-    const firebaseConfig = {
-      apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
-      authDomain: "gag-4a6bd.firebaseapp.com",
-      databaseURL: "https://gag-4a6bd-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "gag-4a6bd",
-      storageBucket: "gag-4a6bd.appspot.com",
-      messagingSenderId: "355235183308",
-      appId: "1:355235183308:web:a9b50b7e31e2a276502069"
-    };
+  const firebaseConfig = {
+  apiKey: "AIzaSyCohztyLEbSq2HH4IiMfjnb_UMB2-zwoyw",
+  authDomain: "gag-4a6bd.firebaseapp.com",
+  databaseURL: "https://gag-4a6bd-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "gag-4a6bd",
+  storageBucket: "gag-4a6bd.firebasestorage.app",
+  messagingSenderId: "355235183308",
+  appId: "1:355235183308:web:643a24b93af27b1b502069",
+  measurementId: "G-05LDPVWNDM"
+};
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
