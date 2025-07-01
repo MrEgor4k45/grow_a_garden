@@ -404,6 +404,7 @@
   </p>
 </footer>
 <script>
+   <script>
     function isCaptchaChecked(form) {
       const widget = form.querySelector('.g-recaptcha');
       const response = grecaptcha.getResponse(widget.getAttribute('data-widget-id'));
@@ -426,6 +427,40 @@
         });
       });
     }
-  </script>
+  function getRecaptchaResponse(form) {
+  const widget = form.querySelector('.g-recaptcha');
+  if (!widget) return null;
+  // Получаем response reCAPTCHA, связанный с этим виджетом
+  // grecaptcha.getResponse() без параметров возвращает response последнего рендера
+  // Поскольку у нас на странице несколько капч, надо получить правильный widget id
+  // Но в этой автоматической загрузке, проще просто получить response по order в DOM
+  // Поэтому используем grecaptcha.getResponse(widgetId), widgetId нужно хранить при рендере, но у нас автоген
+  // По умолчанию grecaptcha автоматически рендерит все элементы с классом g-recaptcha и data-sitekey
+  // Поэтому проще получить response через grecaptcha.getResponse(индекс виджета)
+  // Определим индекс текущей капчи в списке всех капч на странице
+  const widgets = document.querySelectorAll('.g-recaptcha');
+  let index = Array.from(widgets).indexOf(widget);
+  return grecaptcha.getResponse(index);
+}
+document.querySelectorAll('form').forEach(form => {
+  form.addEventListener('submit', e => {
+    const response = getRecaptchaResponse(form);
+    if (!response || response.length === 0) {
+      e.preventDefault();
+      alert({
+        ru: 'Пожалуйста, подтвердите капчу.',
+        uk: 'Будь ласка, підтвердіть капчу.',
+        en: 'Please complete the captcha.'
+      }[currentLang] || 'Please complete the captcha.');
+    } else {
+      // Если капча пройдена — после отправки заявки сбросим капчу
+      setTimeout(() => {
+        const widgets = document.querySelectorAll('.g-recaptcha');
+        const index = Array.from(widgets).indexOf(form.querySelector('.g-recaptcha'));
+        if (index >= 0) grecaptcha.reset(index);
+      }, 500);
+    }
+  });
+});
 </body>
 </html>
