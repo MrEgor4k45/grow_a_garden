@@ -396,7 +396,7 @@
     listenEntries('buy', 'entries-buy');
     listenEntries('sell', 'entries-sell');
     listenEntries('trade', 'entries-trade');
-const CONTACT_INFO2 = {
+const CONTACT_INFO = {
   ds: "na_testosterone5x30",
   tg: "grow_a_garden_shop"
 };
@@ -407,7 +407,7 @@ function updateContactInfo() {
   // Обновляем контактную информацию в формах
   const formInputs = document.querySelectorAll('input[placeholder*="Контакт"]');
   formInputs.forEach(input => {
-    input.value = `DS: ${CONTACT_INFO2.ds} | TG: ${CONTACT_INFO2.tg}`;
+    input.value = `DS: ${CONTACT_INFO.ds} | TG: ${CONTACT_INFO.tg}`;
   });
   
   // Добавляем контактную информацию в футер
@@ -415,7 +415,7 @@ function updateContactInfo() {
   footer.className = 'overlay';
   footer.innerHTML = `
     <h3 id="contact-title">${t.contactTitle}</h3>
-    <p id="contact-info">Discord: ${CONTACT_INFO2.ds}<br>Telegram: ${CONTACT_INFO2.tg}</p>
+    <p id="contact-info">Discord: ${CONTACT_INFO.ds}<br>Telegram: ${CONTACT_INFO.tg}</p>
   `;
   document.body.appendChild(footer);
 }
