@@ -255,7 +255,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const discordWebhook = "https://discord.com/api/webhooks/1389489483812175892/xVBCE4BDw5JzAtuOx3NmJ-gj7FpaYdFykNlcifVugL-Sax88lAN_mFcD6qI-DPCx81jG";
+        const discordWebhook = "http://localhost:3000/send";
         function addEntry(type, data) {
             const newRef = db.ref(type).push();
             newRef.set(data);
