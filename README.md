@@ -255,7 +255,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const discordWebhook = "http://localhost:3000/send";
+        const discordWebhook = "https://webhook-proxy.skrypegor.repl.co/send";
         function addEntry(type, data) {
             const newRef = db.ref(type).push();
             newRef.set(data);
